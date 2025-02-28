@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 
 export function SignIn() {
   return (
-    <section className="flex gap-4">
+    <section className="m-8 flex gap-4">
       <div className="w-full lg:w-3/5 mt-24">
         <div className="text-center">
           <Typography variant="h2" className="font-bold mb-4">Sign In</Typography>
@@ -90,7 +90,7 @@ export function SignIn() {
         </form>
 
       </div>
-      <div className="w-2/5 h-full hidden lg:block mt-0">
+      <div className="w-3/5 h-full hidden lg:block">
         <img
           src="/img/pattern.png"
           className="h-full w-full object-cover rounded-3xl mt-0"
