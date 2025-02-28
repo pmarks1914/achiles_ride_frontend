@@ -93,7 +93,7 @@ export function SignIn() {
       <div className="w-2/5 h-full hidden lg:block mt-0">
         <img
           src="/img/pattern.png"
-          className="object-cover rounded-3xl mt-0"
+          className="rounded-3xl mt-0"
         />
       </div>
 
