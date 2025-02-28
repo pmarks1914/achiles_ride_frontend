@@ -90,7 +90,7 @@ export function SignIn() {
         </form>
 
       </div>
-      <div className="w-2/5 h-full hidden lg:block mt-0">
+      <div className=" mt-0">
         <img
           src="/img/pattern.png"
           className="rounded-3xl mt-0"
