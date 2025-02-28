@@ -36,6 +36,7 @@ export function SignUp() {
               }}
             />
           </div>
+          
           <Checkbox
             label={
               <Typography
