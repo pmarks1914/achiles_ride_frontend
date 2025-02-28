@@ -21,7 +21,7 @@ export function SignUp() {
           className="h-full w-full object-cover rounded-3xl"
         />
       </div>
-      <div className="w-full ">
+      <div className="w-full lg:w">
         <div className="text-center">
           <Typography variant="h2" className="font-bold mb-4">Join Us Today</Typography>
           <Typography variant="paragraph" color="blue-gray" className="text-lg font-normal">Enter your email and password to register.</Typography>
