@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 
 export function SignIn() {
   return (
-    <section className=" flex gap-4">
+    <section className="flex gap-4">
       <div className="w-full lg:w-3/5 mt-24">
         <div className="text-center">
           <Typography variant="h2" className="font-bold mb-4">Sign In</Typography>
