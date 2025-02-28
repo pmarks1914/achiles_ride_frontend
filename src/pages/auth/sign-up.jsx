@@ -9,6 +9,10 @@ import { Link } from "react-router-dom";
 
 
 export function SignUp() {
+
+  function postData(){
+    // 
+  }
   return (
     <section className="m-8 flex">
       <div className="w-3/5 h-full hidden lg:block">
