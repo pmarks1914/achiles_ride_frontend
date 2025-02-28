@@ -14,7 +14,7 @@ export function SignUp() {
     // 
   }
   return (
-    <section className="m-8 flex">
+    <section className="m-8 flex gap-4">
       <div className="w-3/5 h-full hidden lg:block">
         <img
           src="/img/pattern.png"
