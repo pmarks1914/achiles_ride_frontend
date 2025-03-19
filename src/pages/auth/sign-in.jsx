@@ -75,15 +75,6 @@ export function SignIn() {
               userData = {...userData, ...response?.data, ...{type: userType, counter: counter}, ...{permission_list: permission_list}}
               // console.log(userData);
               localStorage.setItem("userDataStore", JSON.stringify(userData));
-              // Cookie
-              // document.cookie = "cookieData" + "=" + JSON.stringify({ 
-              //   account: "", 
-              // wallet: "",
-              // status: "",
-              // access: "",
-              // refresh: "",            
-              // permission_list: ""
-              // })
 
             if(response_2?.data?.user?.must_change_password){
               window.location.href = "/change-password";
