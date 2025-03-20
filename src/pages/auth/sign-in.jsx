@@ -5,13 +5,18 @@ import {
   Button,
   Typography,
 } from "@material-tailwind/react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
+
+const apiUrl = import.meta.env.VITE_API_URL;
 
 
 export function SignIn() {
 
+
+  console.log("process.env.VITE_API_URL ", apiUrl)
   // call api
-  const [getFormDataError, setGetFormDataError] = React.useState({
+  const [getFormDataError, setGetFormDataError] = useState({
     "password": false,
     "email": false
   })
