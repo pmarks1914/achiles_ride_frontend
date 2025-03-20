@@ -5,6 +5,7 @@ import {
   Button,
   Typography,
 } from "@material-tailwind/react";
+import axios from "axios";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -25,7 +26,6 @@ export function SignIn() {
   const [loader, setLoader] = useState("<div></div")
   const [login, setLogin] = useState("Login")
   const [loginError, setLoginError] = useState("")
-  const [userType, setUserType] = useState("Student")
 
   function CheckLogin(e){
     e.preventDefault();    
@@ -61,13 +61,13 @@ export function SignIn() {
         data: formData
       };
       axios.request(config).then(response => {
-        console.log(response.data, "auth ");
+        // console.log(response.status, "auth ");
 
         if(response?.status === 200){
           let permission_list = ['MERCHANT_ADMIN', 'SUPER_ADMIN']
           let counter = 600000; // 600000 = 10m
           let userData = response?.data;
-          userData = {...userData, ...response?.data, ...{type: userType, counter: counter}, ...{permission_list: permission_list}}
+          userData = {...userData, ...response?.data, ...{ counter: counter}, ...{permission_list: permission_list}}
           // console.log(userData);
           localStorage.setItem("userDataStore", JSON.stringify(userData));
 
@@ -135,7 +135,7 @@ export function SignIn() {
               labelProps={{
                 className: "before:content-none after:content-none",
               }}
-              onChange={(e)=>setUsernameVar(e.target.value)}
+              onChange={(e)=>{setUsernameVar(e.target.value), setLoginError("")}}
             />
             <Typography variant="small" color="blue-gray" className="-mb-3 font-medium">
               Password
@@ -148,54 +148,18 @@ export function SignIn() {
               labelProps={{
                 className: "before:content-none after:content-none",
               }}
-              onChange={(e)=>setPasswordVar(e.target.value)}
+              onChange={(e)=>{setPasswordVar(e.target.value), setLoginError("")}}
             />
           </div>
-          <Checkbox
-            label={
-              <Typography
-                variant="small"
-                color="gray"
-                className="flex items-center justify-start font-medium"
-              >
-                I agree the&nbsp;
-                <a
-                  href="#"
-                  className="font-normal text-black transition-colors hover:text-gray-900 underline"
-                >
-                  Terms and Conditions
-                </a>
-              </Typography>
-            }
-            containerProps={{ className: "-ml-2.5" }}
-          />
-          <Button className="mt-6" fullWidth>
+          
+          <Button className="mt-6" fullWidth onClick={(e)=>CheckLogin(e)} >
             Sign In
           </Button>
 
-          <div className="flex items-center justify-between gap-2 mt-6">
-            <Checkbox
-              label={
-                <Typography
-                  variant="small"
-                  color="gray"
-                  className="flex items-center justify-start font-medium"
-                >
-                  Subscribe me to newsletter
-                </Typography>
-              }
-              containerProps={{ className: "-ml-2.5" }}
-            />
-            <Typography variant="small" className="font-medium text-gray-900">
-              <a href="#">
-                Forgot Password
-              </a>
-            </Typography>
-          </div>
-          <Typography variant="paragraph" className="text-center text-blue-gray-500 font-medium mt-4">
-            Not registered?
-            <Link to="/auth/sign-up" className="text-gray-900 ml-1">Create account</Link>
-          </Typography>
+          <p className="mt-3 my-0 mx-0" style={{color: "red"}} >
+            {loginError}
+          </p>
+
         </form>
 
       </div>
