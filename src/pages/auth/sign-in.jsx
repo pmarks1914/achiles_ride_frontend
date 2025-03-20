@@ -8,13 +8,13 @@ import {
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-const apiUrl = import.meta.env.VITE_API_URL;
-
+const apiUrl = import.meta.env.VITE_API_URL_BASE_API;
+ 
 
 export function SignIn() {
 
 
-  console.log("process.env.VITE_API_URL ", apiUrl)
+  console.log("process ", apiUrl)
   // call api
   const [getFormDataError, setGetFormDataError] = useState({
     "password": false,
@@ -53,7 +53,7 @@ export function SignIn() {
 
       let config = {
         method: 'post',
-        url: process.env.REACT_APP_BASE_API + "/login/",
+        url: apiUrl + "/login/user",
         maxBodyLength: Infinity,
         headers: { 
           'Content-Type': 'application/x-www-form-urlencoded'      
@@ -61,40 +61,26 @@ export function SignIn() {
         data: formData
       };
       axios.request(config).then(response => {
-        // console.log(response.data, "auth ", response.data.token_type + " " + response.data.token);
+        console.log(response.data, "auth ");
 
-        let config_2 = {
-          method: 'get',
-          url: process.env.REACT_APP_BASE_API + "/user-details/",
-          maxBodyLength: Infinity,
-          headers: { 
-            'Authorization': 'Bearer ' + response?.data?.access_token
-          } 
-        };
-        axios.request(config_2).then(response_2 => {
-          // console.log(response_2);
-          if(response_2?.status === 200){
-              let permission_list = ['MERCHANT_ADMIN', 'SUPER_ADMIN']
-              let counter = 600000; // 600000 = 10m
-              let userData = response_2?.data;
-              userData = {...userData, ...response?.data, ...{type: userType, counter: counter}, ...{permission_list: permission_list}}
-              // console.log(userData);
-              localStorage.setItem("userDataStore", JSON.stringify(userData));
+        if(response?.status === 200){
+          let permission_list = ['MERCHANT_ADMIN', 'SUPER_ADMIN']
+          let counter = 600000; // 600000 = 10m
+          let userData = response?.data;
+          userData = {...userData, ...response?.data, ...{type: userType, counter: counter}, ...{permission_list: permission_list}}
+          // console.log(userData);
+          localStorage.setItem("userDataStore", JSON.stringify(userData));
 
-            if(response_2?.data?.user?.must_change_password){
-              window.location.href = "/change-password";
-            }
-            else{
-              setTimeout(() => {
-                window.location.href = "/dashboard";
-              }, 1000)
-            }
+        if(response?.data?.user?.must_change_password){
+          window.location.href = "/change-password";
+        }
+        else{
+          setTimeout(() => {
+            window.location.href = "/dashboard";
+          }, 1000)
+        }
 
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      }
 
       }).catch(function (error) {
 
@@ -149,6 +135,7 @@ export function SignIn() {
               labelProps={{
                 className: "before:content-none after:content-none",
               }}
+              onChange={(e)=>setUsernameVar(e.target.value)}
             />
             <Typography variant="small" color="blue-gray" className="-mb-3 font-medium">
               Password
@@ -161,6 +148,7 @@ export function SignIn() {
               labelProps={{
                 className: "before:content-none after:content-none",
               }}
+              onChange={(e)=>setPasswordVar(e.target.value)}
             />
           </div>
           <Checkbox
