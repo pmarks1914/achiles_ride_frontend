@@ -76,7 +76,7 @@ export function SignIn() {
         }
         else{
           setTimeout(() => {
-            window.location.href = "/dashboard";
+            window.location.href = "/dashboard/home";
           }, 1000)
         }
 
