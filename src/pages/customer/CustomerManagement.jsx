@@ -51,7 +51,7 @@ const CustomerManagement = () => {
     const fetchRiders = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`${apiUrl}/api/user/?user_type=rider`, {
+            const response = await axios.get(`${apiUrl}/api/user/?user_type=customer`, {
                 params: {
                     page: currentPage,
                     per_page: pageSize,
