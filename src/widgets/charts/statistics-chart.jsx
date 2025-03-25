@@ -22,11 +22,11 @@ export function StatisticsChart({ color, chart, title, description, footer }) {
           {description}
         </Typography>
       </CardBody>
-      {footer && (
+      {/* {footer && (
         <CardFooter className="border-t border-blue-gray-50 px-6 py-5">
           {footer}
         </CardFooter>
-      )}
+      )} */}
     </Card>
   );
 }

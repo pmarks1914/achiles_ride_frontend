@@ -13,6 +13,7 @@ import {
 } from "@heroicons/react/24/solid";
 import { Home, Profile, Tables, Notifications } from "@/pages/dashboard";
 import { SignIn, SignUp } from "@/pages/auth";
+import Rider from "./pages/rider/rider";
 
 const icon = {
   className: "w-5 h-5 text-inherit",
@@ -38,7 +39,7 @@ export const routes = [
         icon: <UserPlusIcon {...icon} />,
         name: "rider",
         path: "/rider",
-        element: <Profile />,
+        element: <Rider />,
       },
       {
         icon: <CircleStackIcon {...icon} />,
