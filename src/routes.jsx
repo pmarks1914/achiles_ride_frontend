@@ -14,6 +14,7 @@ import {
 import { Home, Profile, Tables, Notifications } from "@/pages/dashboard";
 import { SignIn, SignUp } from "@/pages/auth";
 import Rider from "./pages/rider/rider";
+import Customer from "./pages/customer/customer";
 
 const icon = {
   className: "w-5 h-5 text-inherit",
@@ -33,7 +34,7 @@ export const routes = [
         icon: <UserGroupIcon {...icon} />,
         name: "customer",
         path: "/customer",
-        element: <Profile />,
+        element: <Customer />,
       },
       {
         icon: <UserPlusIcon {...icon} />,

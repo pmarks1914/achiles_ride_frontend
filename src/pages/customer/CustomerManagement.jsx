@@ -374,26 +374,6 @@ const CustomerManagement = () => {
                             required
                         />
                     </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">License Number</label>
-                        <input
-                            type="text"
-                            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            value={newRiderData.license_number}
-                            onChange={(e) => setNewRiderData({...newRiderData, license_number: e.target.value})}
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Vehicle Registration</label>
-                        <input
-                            type="text"
-                            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            value={newRiderData.vehicle_registration}
-                            onChange={(e) => setNewRiderData({...newRiderData, vehicle_registration: e.target.value})}
-                            required
-                        />
-                    </div>
                     <div className="flex justify-end space-x-3 pt-4">
                         
                         <button 
@@ -444,15 +424,7 @@ const CustomerManagement = () => {
                         <div>
                             <p className="text-sm text-gray-500">Phone</p>
                             <p className="text-gray-800">{selectedRider?.phone}</p>
-                        </div>
-                        <div>
-                            <p className="text-sm text-gray-500">License Number</p>
-                            <p className="text-gray-800">{selectedRider?.rider?.license_number}</p>
-                        </div>
-                        <div>
-                            <p className="text-sm text-gray-500">Vehicle Registration</p>
-                            <p className="text-gray-800">{selectedRider?.rider?.vehicle_registration}</p>
-                        </div>
+                        </div>                        
                         <div>
                             <p className="text-sm text-gray-500">Status</p>
                             <span className={`px-2 py-1 rounded-full text-xs ${
@@ -525,26 +497,6 @@ const CustomerManagement = () => {
                             className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                             value={editRiderData.phone}
                             onChange={(e) => setEditRiderData({...editRiderData, phone: e.target.value})}
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">License Number</label>
-                        <input
-                            type="text"
-                            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            value={editRiderData.license_number}
-                            onChange={(e) => setEditRiderData({...editRiderData, license_number: e.target.value})}
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Vehicle Registration</label>
-                        <input
-                            type="text"
-                            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            value={editRiderData.vehicle_registration}
-                            onChange={(e) => setEditRiderData({...editRiderData, vehicle_registration: e.target.value})}
                             required
                         />
                     </div>
