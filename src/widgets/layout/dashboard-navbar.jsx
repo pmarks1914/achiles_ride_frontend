@@ -14,7 +14,7 @@ import {
 } from "@material-tailwind/react";
 import {
   UserCircleIcon,
-  Cog6ToothIcon,
+  Cog6ToothIcon, 
   BellIcon,
   ClockIcon,
   CreditCardIcon,
@@ -72,9 +72,9 @@ export function DashboardNavbar() {
           </Typography>
         </div>
         <div className="flex items-center">
-          <div className="mr-auto md:mr-4 md:w-56">
+          {/* <div className="mr-auto md:mr-4 md:w-56">
             <Input label="Search" />
-          </div>
+          </div> */}
           <IconButton
             variant="text"
             color="blue-gray"
@@ -90,7 +90,7 @@ export function DashboardNavbar() {
               className="hidden items-center gap-1 px-4 xl:flex normal-case"
             >
               <UserCircleIcon className="h-5 w-5 text-blue-gray-500" />
-              Sign In
+              Sign Out
             </Button>
             <IconButton
               variant="text"
@@ -101,12 +101,12 @@ export function DashboardNavbar() {
             </IconButton>
           </Link>
           <Menu>
-            <MenuHandler>
+            {/* <MenuHandler>
               <IconButton variant="text" color="blue-gray">
                 <BellIcon className="h-5 w-5 text-blue-gray-500" />
               </IconButton>
-            </MenuHandler>
-            <MenuList className="w-max border-0">
+            </MenuHandler> */}
+            {/* <MenuList className="w-max border-0">
               <MenuItem className="flex items-center gap-3">
                 <Avatar
                   src="https://demos.creative-tim.com/material-dashboard/assets/img/team-2.jpg"
@@ -176,7 +176,7 @@ export function DashboardNavbar() {
                   </Typography>
                 </div>
               </MenuItem>
-            </MenuList>
+            </MenuList> */}
           </Menu>
           <IconButton
             variant="text"
