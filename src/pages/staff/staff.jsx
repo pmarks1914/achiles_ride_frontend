@@ -1,6 +1,6 @@
 import React from 'react';
-import StaffManagement from './StaffManagement';
 import { Card } from '@material-tailwind/react';
+import StaffManagement from './StaffManagement';
 
 const Staff = () => {
 

@@ -51,7 +51,7 @@ const StaffManagement = () => {
     const fetchStaffs = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`${apiUrl}/api/user/?user_type=Staff`, {
+            const response = await axios.get(`${apiUrl}/api/user/?user_type=staff`, {
                 params: {
                     page: currentPage,
                     per_page: pageSize,
