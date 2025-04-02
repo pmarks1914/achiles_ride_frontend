@@ -125,7 +125,7 @@ const StaffManagement = () => {
     const handleUpdateStaff = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.put(
+            const response = await axios.patch(
                 `${apiUrl}/api/user/${selectedStaff?.user_id}`,
                 {
                     name: editStaffData.name,
