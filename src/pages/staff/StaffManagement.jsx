@@ -128,6 +128,7 @@ const StaffManagement = () => {
             const response = await axios.patch(
                 `${apiUrl}/api/user/${selectedStaff?.user_id}`,
                 {
+                    user_type: 'staff',
                     name: editStaffData.name,
                     email: editStaffData.email,
                     phone: editStaffData.phone,
