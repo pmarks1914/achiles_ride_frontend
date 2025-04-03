@@ -253,10 +253,21 @@ const StaffManagement = () => {
             width: '15%'
         },
         { 
+            name: 'Status', 
+            cell: row => (
+                <span className={`px-2 py-1 rounded-full text-xs ${
+                    row?.disabled ? "bg-red-100 text-red-800" : "bg-green-100 text-green-800"
+                }`}>
+                    {row?.disabled ? "Inactive" : "Active"}
+                </span>
+            ),
+            // width: '10%'
+        },
+        { 
             name: 'Registered At', 
             selector: row => moment(row?.registered_at).format('LLL'), 
             width: '15%' 
-        },
+        }, 
         { 
             name: 'Actions', 
             cell: row => (
