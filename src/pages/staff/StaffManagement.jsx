@@ -482,9 +482,9 @@ const StaffManagement = () => {
                             <div>
                                 <p className="text-sm text-gray-500">Admin Details</p>
                                 <div className="border p-2 rounded">
-                                    <p>Name: {selectedStaff.admins[0].name}</p>
+                                    {/* <p>Name: {selectedStaff.admins[0].name}</p>
                                     <p>Email: {selectedStaff.admins[0].email}</p>
-                                    <p>Phone: {selectedStaff.admins[0].phone}</p>
+                                    <p>Phone: {selectedStaff.admins[0].phone}</p> */}
                                     <p>Role: {selectedStaff.admins[0].role.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}</p>
                                 </div>
                             </div>
