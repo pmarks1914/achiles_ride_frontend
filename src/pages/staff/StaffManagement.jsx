@@ -170,6 +170,7 @@ const StaffManagement = () => {
                         `${apiUrl}/api/user/${staff?.user_id}`,
                         {
                             headers: {
+                                'Content-Type': 'application/json',
                                 'Authorization': `Bearer ${currentUser.access_token}`
                             }
                         }
