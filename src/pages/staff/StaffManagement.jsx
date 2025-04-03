@@ -161,12 +161,12 @@ const StaffManagement = () => {
             }
         } catch (error) {
             // toast.error(error.response?.data?.message || "Failed to create staff");
-            console.error("Error creating staff:", error.response.data.detail);
+            // console.error("Error creating staff:", error?.response?.data?.detail);
             if(error.response){
                 // 
                 Swal.fire({
                     icon: 'error',
-                    title: `Error: ${ error.response.data.detail || error?.response?.data?.detail[0]?.msg }`,
+                    title: `Error: ${ error?.response?.data?.detail[0]?.msg || error?.response?.data?.detail }`,
                     toast: true,
                     position: 'top',
                     showConfirmButton: false,
@@ -188,7 +188,7 @@ const StaffManagement = () => {
                 // 
                 Swal.fire({
                     icon: 'error',
-                    title: `Error: ${error?.request?.data?.detail}`,
+                    title: `Error: ${ error?.reguest?.data?.detail[0]?.msg || error?.reguest?.data?.detail }`,
                     toast: true,
                     position: 'top',
                     showConfirmButton: false,
@@ -281,7 +281,7 @@ const StaffManagement = () => {
                 // 
                 Swal.fire({
                     icon: 'error',
-                    title: `Error: ${ error.response.data.detail || error?.response?.data?.detail[0]?.msg }`,
+                    title: `Error: ${ error?.response?.data?.detail[0]?.msg || error?.response?.data?.detail }`,
                     toast: true,
                     position: 'top',
                     showConfirmButton: false,
@@ -303,7 +303,7 @@ const StaffManagement = () => {
                 // 
                 Swal.fire({
                     icon: 'error',
-                    title: `Error: ${error?.request?.data?.detail}`,
+                    title: `Error: ${ error?.reguest?.data?.detail[0]?.msg || error?.reguest?.data?.detail }`,
                     toast: true,
                     position: 'top',
                     showConfirmButton: false,
@@ -416,13 +416,14 @@ const StaffManagement = () => {
                     }
                 } catch (error) {
                     // toast.error(error.response?.data?.message || "Failed to delete staff");
-                    // console.error("Error deleting staff:", error);
-                    
+                    // console.error("Error deleting staff:", error?.response?.data?.detail, error?.response?.data?.detail[0]?.msg );
+                    error?.response?.data?.detail[0]?.msg || error?.response?.data?.detail 
+                    // 
                     if(error.response){
                         // 
                         Swal.fire({
                             icon: 'error',
-                            title: `Error: ${ error.response.data.detail || error?.response?.data?.detail[0]?.msg }`,
+                            title: `Error: ${ error?.response?.data?.detail[0]?.msg || error?.response?.data?.detail }`,
                             toast: true,
                             position: 'top',
                             showConfirmButton: false,
@@ -444,7 +445,7 @@ const StaffManagement = () => {
                         // 
                         Swal.fire({
                             icon: 'error',
-                            title: `Error: ${error?.request?.data?.detail}`,
+                            title: `Error: ${ error?.reguest?.data?.detail[0]?.msg || error?.reguest?.data?.detail }`,
                             toast: true,
                             position: 'top',
                             showConfirmButton: false,
