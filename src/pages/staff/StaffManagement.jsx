@@ -574,7 +574,7 @@ const StaffManagement = () => {
                     </div>
                     
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Active Status</label>
                         <Select
                             options={[
                                 { value: false, label: 'Active' },
