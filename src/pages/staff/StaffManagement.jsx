@@ -166,7 +166,7 @@ const StaffManagement = () => {
                 // 
                 Swal.fire({
                     icon: 'error',
-                    title: `Error: ${error.response.data.detail}`,
+                    title: `Error: ${ error.response.data.detail || error?.response?.data?.detail[0]?.msg }`,
                     toast: true,
                     position: 'top',
                     showConfirmButton: false,
@@ -188,7 +188,7 @@ const StaffManagement = () => {
                 // 
                 Swal.fire({
                     icon: 'error',
-                    title: `Error: ${error.request.data.detail}`,
+                    title: `Error: ${error?.request?.data?.detail}`,
                     toast: true,
                     position: 'top',
                     showConfirmButton: false,
@@ -230,13 +230,119 @@ const StaffManagement = () => {
             );
 
             if (response.status === 200) {
-                toast.success("Staff updated successfully");
+                Swal.fire({
+                    icon: 'success',
+                    title: `Successful! `,
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    closeOnConfirm: false,
+                    didOpen: (toast) => {
+                      const progressBar = toast.querySelector('.swal2-timer-progress-bar');
+                      if (progressBar) {
+                        progressBar.style.backgroundColor = 'green';
+                      }
+                      
+                      toast.addEventListener('mouseenter', Swal.stopTimer)
+                      toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                  })
                 setEditModal(false);
                 fetchStaffs();
             }
+            else{
+                // 
+                Swal.fire({
+                    icon: 'error',
+                    title: `Error! `,
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    closeOnConfirm: false,
+                    didOpen: (toast) => {
+                      const progressBar = toast.querySelector('.swal2-timer-progress-bar');
+                      if (progressBar) {
+                        progressBar.style.backgroundColor = 'black';
+                      }
+                      
+                      toast.addEventListener('mouseenter', Swal.stopTimer)
+                      toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                  })
+            }
         } catch (error) {
-            toast.error(error.response?.data?.message || "Failed to update staff");
-            console.error("Error updating staff:", error);
+            // toast.error(error.response?.data?.message || "Failed to update staff");
+            // console.error("Error updating staff:", error);
+            if(error.response){
+                // 
+                Swal.fire({
+                    icon: 'error',
+                    title: `Error: ${ error.response.data.detail || error?.response?.data?.detail[0]?.msg }`,
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    closeOnConfirm: false,
+                    didOpen: (toast) => {
+                      const progressBar = toast.querySelector('.swal2-timer-progress-bar');
+                      if (progressBar) {
+                        progressBar.style.backgroundColor = 'black';
+                      }
+                      
+                      toast.addEventListener('mouseenter', Swal.stopTimer)
+                      toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                  })
+            }
+            else if(error.request){
+                // 
+                Swal.fire({
+                    icon: 'error',
+                    title: `Error: ${error?.request?.data?.detail}`,
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    closeOnConfirm: false,
+                    didOpen: (toast) => {
+                      const progressBar = toast.querySelector('.swal2-timer-progress-bar');
+                      if (progressBar) {
+                        progressBar.style.backgroundColor = 'black';
+                      }
+                      
+                      toast.addEventListener('mouseenter', Swal.stopTimer)
+                      toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                  })
+            }
+            else{
+                // 
+                Swal.fire({
+                    icon: 'error',
+                    title: `Error! try again.`,
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    closeOnConfirm: false,
+                    didOpen: (toast) => {
+                      const progressBar = toast.querySelector('.swal2-timer-progress-bar');
+                      if (progressBar) {
+                        progressBar.style.backgroundColor = 'black';
+                      }
+                      
+                      toast.addEventListener('mouseenter', Swal.stopTimer)
+                      toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                  })
+            }
         }
     };
 
@@ -253,7 +359,7 @@ const StaffManagement = () => {
             if (result.isConfirmed) {
                 try {
                     const response = await axios.delete(
-                        `${apiUrl}/api/user/${staff?.user_id}`,
+                        `${apiUrl}/api/user/${staff?.user_id}g`,
                         {
                             headers: {
                                 'Content-Type': 'application/json',
@@ -263,12 +369,121 @@ const StaffManagement = () => {
                     );
 
                     if (response.status === 200) {
-                        toast.success("Staff deleted successfully");
-                        fetchStaffs();
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: `Successful! `,
+                            toast: true,
+                            position: 'top',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            closeOnConfirm: false,
+                            didOpen: (toast) => {
+                              const progressBar = toast.querySelector('.swal2-timer-progress-bar');
+                              if (progressBar) {
+                                progressBar.style.backgroundColor = 'green';
+                              }
+                              
+                              toast.addEventListener('mouseenter', Swal.stopTimer)
+                              toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                          })      
+
+                          fetchStaffs();
+                    }
+                    else{
+                        // 
+                        Swal.fire({
+                            icon: 'error',
+                            title: `Error! `,
+                            toast: true,
+                            position: 'top',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            closeOnConfirm: false,
+                            didOpen: (toast) => {
+                              const progressBar = toast.querySelector('.swal2-timer-progress-bar');
+                              if (progressBar) {
+                                progressBar.style.backgroundColor = 'black';
+                              }
+                              
+                              toast.addEventListener('mouseenter', Swal.stopTimer)
+                              toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                          })
                     }
                 } catch (error) {
-                    toast.error(error.response?.data?.message || "Failed to delete staff");
-                    console.error("Error deleting staff:", error);
+                    // toast.error(error.response?.data?.message || "Failed to delete staff");
+                    // console.error("Error deleting staff:", error);
+                    
+                    if(error.response){
+                        // 
+                        Swal.fire({
+                            icon: 'error',
+                            title: `Error: ${ error.response.data.detail || error?.response?.data?.detail[0]?.msg }`,
+                            toast: true,
+                            position: 'top',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            closeOnConfirm: false,
+                            didOpen: (toast) => {
+                              const progressBar = toast.querySelector('.swal2-timer-progress-bar');
+                              if (progressBar) {
+                                progressBar.style.backgroundColor = 'black';
+                              }
+                              
+                              toast.addEventListener('mouseenter', Swal.stopTimer)
+                              toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                          })
+                    }
+                    else if(error.request){
+                        // 
+                        Swal.fire({
+                            icon: 'error',
+                            title: `Error: ${error?.request?.data?.detail}`,
+                            toast: true,
+                            position: 'top',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            closeOnConfirm: false,
+                            didOpen: (toast) => {
+                              const progressBar = toast.querySelector('.swal2-timer-progress-bar');
+                              if (progressBar) {
+                                progressBar.style.backgroundColor = 'black';
+                              }
+                              
+                              toast.addEventListener('mouseenter', Swal.stopTimer)
+                              toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                          })
+                    }
+                    else{
+                        // 
+                        Swal.fire({
+                            icon: 'error',
+                            title: `Error! try again.`,
+                            toast: true,
+                            position: 'top',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            closeOnConfirm: false,
+                            didOpen: (toast) => {
+                              const progressBar = toast.querySelector('.swal2-timer-progress-bar');
+                              if (progressBar) {
+                                progressBar.style.backgroundColor = 'black';
+                              }
+                              
+                              toast.addEventListener('mouseenter', Swal.stopTimer)
+                              toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                          })
+                    }
                 }
             }
         });
