@@ -72,7 +72,7 @@ export function SignIn() {
           localStorage.setItem("userDataStore", JSON.stringify(userData));
 
         if(response?.data?.user?.must_change_password){
-          window.location.href = "/change-password";
+          // window.location.href = "/change-password";
         }
         else{
           setTimeout(() => {

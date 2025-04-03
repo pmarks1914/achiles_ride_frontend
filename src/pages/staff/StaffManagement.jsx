@@ -124,16 +124,15 @@ const StaffManagement = () => {
 
     const handleUpdateStaff = async (e) => {
         e.preventDefault();
+        console.log(editStaffData)
         try {
+
+            console.log(editStaffData)
             const response = await axios.patch(
                 `${apiUrl}/api/user/${selectedStaff?.user_id}`,
                 {
-                    user_type: 'staff',
-                    name: editStaffData.name,
-                    email: editStaffData.email,
-                    phone: editStaffData.phone,
-                    disabled: editStaffData.disabled,
-                    role: editStaffData.role
+                    ...editStaffData,
+                    ...{user_type: 'staff'}
                 },
                 {
                     headers: {
@@ -243,25 +242,6 @@ const StaffManagement = () => {
             name: 'Phone', 
             selector: row => row?.phone, 
             width: '15%' 
-        },
-        { 
-            name: 'Status', 
-            cell: row => (
-                <div className="flex items-center">
-                    <span className={`px-2 py-1 rounded-full text-xs ${
-                        !row?.disabled ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
-                    }`}>
-                        {!row?.disabled ? "Active" : "Inactive"}
-                    </span>
-                    <button 
-                        className="ml-2 px-2 py-1 text-xs bg-gray-200 rounded hover:bg-gray-300"
-                        onClick={() => toggleStaffStatus(row)}
-                    >
-                        {row?.disabled ? "Activate" : "Deactivate"}
-                    </button>
-                </div>
-            ),
-            width: '15%'
         },
         { 
             name: 'Role', 
@@ -540,7 +520,7 @@ const StaffManagement = () => {
                     </button>
                 </div>
                 
-                <form onSubmit={handleUpdateStaff} className="space-y-4">
+                <form onSubmit={(e)=>handleUpdateStaff(e)} className="space-y-4">
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
                         <input
@@ -597,17 +577,18 @@ const StaffManagement = () => {
                         <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
                         <Select
                             options={[
-                                { value: true, label: 'Active' },
-                                { value: false, label: 'Inactive' }
+                                { value: false, label: 'Active' },
+                                { value: true, label: 'Inactive' }
                             ]}
                             value={{
                                 value: editStaffData.disabled,
-                                label: editStaffData.disabled ? 'Active' : 'InActive'
+                                label: editStaffData.disabled ? 'Inactive' : 'Active'
                             }}
-                            onChange={(selected) => setEditStaffData({
+                            onChange={(selected) => { setEditStaffData({
                                 ...editStaffData, 
                                 disabled: selected.value
-                            })}
+                                })
+                            }}
                             className="basic-single"
                             classNamePrefix="select"
                         />
