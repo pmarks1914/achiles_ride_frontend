@@ -197,6 +197,7 @@ const StaffManagement = () => {
                 },
                 {
                     headers: {
+                        'Content-Type': 'application/json',
                         'Authorization': `Bearer ${currentUser.access_token}`
                     }
                 }
