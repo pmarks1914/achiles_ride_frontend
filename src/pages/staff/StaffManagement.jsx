@@ -94,13 +94,15 @@ const StaffManagement = () => {
     const handleCreateStaff = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(`${apiUrl}/api/user/`, 
+            const response = await axios.post(`${apiUrl}/api/user/staff/`, 
                 {
                     name: newStaffData.name,
                     email: newStaffData.email,
                     phone: newStaffData.phone,
                     user_type: 'staff',
-                    role: newStaffData.role
+                    role: newStaffData.role,
+                    password: `${newStaffData.email}${newStaffData.phone}`,
+                    disabled: false
                 },
                 {
                     headers: {
@@ -110,15 +112,100 @@ const StaffManagement = () => {
                 }
             );
 
-            if (response.status === 201) {
-                toast.success("Staff created successfully");
+            if (response.status === 200) {
+                
+                Swal.fire({
+                    icon: 'success',
+                    title: `Successful! `,
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    closeOnConfirm: false,
+                    didOpen: (toast) => {
+                      const progressBar = toast.querySelector('.swal2-timer-progress-bar');
+                      if (progressBar) {
+                        progressBar.style.backgroundColor = 'green';
+                      }
+                      
+                      toast.addEventListener('mouseenter', Swal.stopTimer)
+                      toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                  })
                 setCreateModal(false);
                 fetchStaffs();
                 resetNewStaffForm();
             }
+            else{
+                // 
+                Swal.fire({
+                    icon: 'error',
+                    title: `Error! `,
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    closeOnConfirm: false,
+                    didOpen: (toast) => {
+                      const progressBar = toast.querySelector('.swal2-timer-progress-bar');
+                      if (progressBar) {
+                        progressBar.style.backgroundColor = 'black';
+                      }
+                      
+                      toast.addEventListener('mouseenter', Swal.stopTimer)
+                      toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                  })
+            }
         } catch (error) {
-            toast.error(error.response?.data?.message || "Failed to create staff");
-            console.error("Error creating staff:", error);
+            // toast.error(error.response?.data?.message || "Failed to create staff");
+            console.error("Error creating staff:", error.response.data.detail);
+            if(error.response){
+                // 
+                Swal.fire({
+                    icon: 'error',
+                    title: `Error: ${error.response.data.detail}`,
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    closeOnConfirm: false,
+                    didOpen: (toast) => {
+                      const progressBar = toast.querySelector('.swal2-timer-progress-bar');
+                      if (progressBar) {
+                        progressBar.style.backgroundColor = 'black';
+                      }
+                      
+                      toast.addEventListener('mouseenter', Swal.stopTimer)
+                      toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                  })
+            }
+            else if(error.request){
+                // 
+                Swal.fire({
+                    icon: 'error',
+                    title: `Error: ${error.request.data.detail}`,
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    closeOnConfirm: false,
+                    didOpen: (toast) => {
+                      const progressBar = toast.querySelector('.swal2-timer-progress-bar');
+                      if (progressBar) {
+                        progressBar.style.backgroundColor = 'black';
+                      }
+                      
+                      toast.addEventListener('mouseenter', Swal.stopTimer)
+                      toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                  })
+            }
         }
     };
 
