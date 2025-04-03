@@ -359,7 +359,7 @@ const StaffManagement = () => {
             if (result.isConfirmed) {
                 try {
                     const response = await axios.delete(
-                        `${apiUrl}/api/user/${staff?.user_id}g`,
+                        `${apiUrl}/api/user/${staff?.user_id}`,
                         {
                             headers: {
                                 'Content-Type': 'application/json',
