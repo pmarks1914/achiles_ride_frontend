@@ -490,31 +490,6 @@ const StaffManagement = () => {
         });
     };
 
-    const toggleStaffStatus = async (staff) => {
-        try {
-            const response = await axios.put(
-                `${apiUrl}/api/user/${staff.user_id}/status`,
-                {
-                    disabled: !staff.disabled
-                },
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${currentUser.access_token}`
-                    }
-                }
-            );
-
-            if (response.status === 200) {
-                toast.success(`Staff ${staff.disabled ? "activated" : "deactivated"} successfully`);
-                fetchStaffs();
-            }
-        } catch (error) {
-            toast.error(error.response?.data?.message || "Failed to update staff status");
-            console.error("Error updating staff status:", error);
-        }
-    };
-
     const resetNewStaffForm = () => {
         setNewStaffData({
             name: '',
