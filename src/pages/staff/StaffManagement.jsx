@@ -592,16 +592,17 @@ const StaffManagement = () => {
                             classNamePrefix="select"
                         />
                     </div>
+                    
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
                         <Select
                             options={[
-                                { value: false, label: 'Active' },
-                                { value: true, label: 'Inactive' }
+                                { value: true, label: 'Active' },
+                                { value: false, label: 'Inactive' }
                             ]}
                             value={{
                                 value: editStaffData.disabled,
-                                label: editStaffData.disabled ? 'Inactive' : 'Active'
+                                label: editStaffData.disabled ? 'Active' : 'InActive'
                             }}
                             onChange={(selected) => setEditStaffData({
                                 ...editStaffData, 
