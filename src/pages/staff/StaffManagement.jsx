@@ -488,7 +488,7 @@ const StaffManagement = () => {
                 }
             }
         });
-    };
+    }; 
 
     const resetNewStaffForm = () => {
         setNewStaffData({

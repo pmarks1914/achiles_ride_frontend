@@ -12,6 +12,7 @@ let currentUser = JSON.parse(localStorage.getItem("userDataStore"));
 
 const apiUrl = import.meta.env.VITE_API_URL_BASE_API;
 
+
 const RiderManagement = () => {
     const [tableData, setTableData] = useState([]);
     const [totalRecords, setTotalRecords] = useState(0);
@@ -36,10 +37,8 @@ const RiderManagement = () => {
         name: '',
         email: '',
         phone: '',
-        user_type: 'rider',
         license_number: '',
-        vehicle_registration: '',
-        vehicle_type: 'motorcycle'
+        vehicle_registration: ''
     });
     
     const [selectedRider, setSelectedRider] = useState(null);
@@ -52,14 +51,13 @@ const RiderManagement = () => {
     const fetchRiders = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`${apiUrl}/api/user/`, {
+            const response = await axios.get(`${apiUrl}/api/user/?user_type=rider`, {
                 params: {
                     page: currentPage,
                     per_page: pageSize,
                     start_date: dateRange[0] ? moment(dateRange[0]).format('YYYY-MM-DD') : null,
                     end_date: dateRange[1] ? moment(dateRange[1]).format('YYYY-MM-DD') : null,
-                    search: searchText,
-                    user_type: 'rider'
+                    search: searchText
                 },
                 headers: {
                     'Content-Type': 'application/json',
@@ -68,13 +66,15 @@ const RiderManagement = () => {
             });            
 
             if (response?.status === 200) {
+                // console.log("response >>", response?.data)
+
                 const { current_page, has_next, has_previous, total_items, page_size, total_pages, items } = response?.data;
                 setTableData(items);
                 setTotalRecords(total_items);
                 setPagination({ next: has_next, previous: has_previous });
             }
         } catch (error) {
-            toast.error("Error fetching rider data");
+            toast.error("Error fetching riders data");
             console.error("Error fetching riders:", error);
         }
         setLoading(false);
@@ -96,17 +96,13 @@ const RiderManagement = () => {
     const handleCreateRider = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(`${apiUrl}/api/user/riders/`, 
+            const response = await axios.post(`${apiUrl}/riders`, 
                 {
                     name: newRiderData.name,
                     email: newRiderData.email,
                     phone: newRiderData.phone,
-                    user_type: 'rider',
                     license_number: newRiderData.license_number,
-                    vehicle_registration: newRiderData.vehicle_registration,
-                    vehicle_type: newRiderData.vehicle_type,
-                    password: `${newRiderData.email}${newRiderData.phone}`,
-                    disabled: false
+                    vehicle_registration: newRiderData.vehicle_registration
                 },
                 {
                     headers: {
@@ -116,104 +112,30 @@ const RiderManagement = () => {
                 }
             );
 
-            if (response.status === 200) {
-                Swal.fire({
-                    icon: 'success',
-                    title: `Successful! `,
-                    toast: true,
-                    position: 'top',
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    closeOnConfirm: false,
-                    didOpen: (toast) => {
-                      const progressBar = toast.querySelector('.swal2-timer-progress-bar');
-                      if (progressBar) {
-                        progressBar.style.backgroundColor = 'green';
-                      }
-                      
-                      toast.addEventListener('mouseenter', Swal.stopTimer)
-                      toast.addEventListener('mouseleave', Swal.resumeTimer)
-                    }
-                });
+            if (response.status === 201) {
+                toast.success("Rider created successfully");
                 setCreateModal(false);
                 fetchRiders();
                 resetNewRiderForm();
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: `Error! `,
-                    toast: true,
-                    position: 'top',
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    closeOnConfirm: false,
-                    didOpen: (toast) => {
-                      const progressBar = toast.querySelector('.swal2-timer-progress-bar');
-                      if (progressBar) {
-                        progressBar.style.backgroundColor = 'black';
-                      }
-                      
-                      toast.addEventListener('mouseenter', Swal.stopTimer)
-                      toast.addEventListener('mouseleave', Swal.resumeTimer)
-                    }
-                });
             }
         } catch (error) {
-            if(error.response){
-                Swal.fire({
-                    icon: 'error',
-                    title: `Error: ${ error?.response?.data?.detail[0]?.msg || error?.response?.data?.detail }`,
-                    toast: true,
-                    position: 'top',
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    closeOnConfirm: false,
-                    didOpen: (toast) => {
-                      const progressBar = toast.querySelector('.swal2-timer-progress-bar');
-                      if (progressBar) {
-                        progressBar.style.backgroundColor = 'black';
-                      }
-                      
-                      toast.addEventListener('mouseenter', Swal.stopTimer)
-                      toast.addEventListener('mouseleave', Swal.resumeTimer)
-                    }
-                });
-            } else if(error.request){
-                Swal.fire({
-                    icon: 'error',
-                    title: `Error: ${ error?.request?.data?.detail[0]?.msg || error?.request?.data?.detail }`,
-                    toast: true,
-                    position: 'top',
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    closeOnConfirm: false,
-                    didOpen: (toast) => {
-                      const progressBar = toast.querySelector('.swal2-timer-progress-bar');
-                      if (progressBar) {
-                        progressBar.style.backgroundColor = 'black';
-                      }
-                      
-                      toast.addEventListener('mouseenter', Swal.stopTimer)
-                      toast.addEventListener('mouseleave', Swal.resumeTimer)
-                    }
-                });
-            }
+            toast.error(error.response?.data?.message || "Failed to create rider");
+            console.error("Error creating rider:", error);
         }
     };
 
     const handleUpdateRider = async (e) => {
         e.preventDefault();
-        console.log(editRiderData)
         try {
-            const response = await axios.patch(
-                `${apiUrl}/api/user/${selectedRider?.user_id}`,
+            const response = await axios.put(
+                `${apiUrl}/riders/${selectedRider?.user_id}`,
                 {
-                    ...editRiderData,
-                    user_type: 'rider'
+                    name: editRiderData.name,
+                    email: editRiderData.email,
+                    phone: editRiderData.phone,
+                    license_number: editRiderData.license_number,
+                    vehicle_registration: editRiderData.vehicle_registration,
+                    availability_status: editRiderData.availability_status
                 },
                 {
                     headers: {
@@ -224,110 +146,13 @@ const RiderManagement = () => {
             );
 
             if (response.status === 200) {
-                Swal.fire({
-                    icon: 'success',
-                    title: `Successful! `,
-                    toast: true,
-                    position: 'top',
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    closeOnConfirm: false,
-                    didOpen: (toast) => {
-                      const progressBar = toast.querySelector('.swal2-timer-progress-bar');
-                      if (progressBar) {
-                        progressBar.style.backgroundColor = 'green';
-                      }
-                      
-                      toast.addEventListener('mouseenter', Swal.stopTimer)
-                      toast.addEventListener('mouseleave', Swal.resumeTimer)
-                    }
-                });
+                toast.success("Rider updated successfully");
                 setEditModal(false);
                 fetchRiders();
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: `Error! `,
-                    toast: true,
-                    position: 'top',
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    closeOnConfirm: false,
-                    didOpen: (toast) => {
-                      const progressBar = toast.querySelector('.swal2-timer-progress-bar');
-                      if (progressBar) {
-                        progressBar.style.backgroundColor = 'black';
-                      }
-                      
-                      toast.addEventListener('mouseenter', Swal.stopTimer)
-                      toast.addEventListener('mouseleave', Swal.resumeTimer)
-                    }
-                });
             }
         } catch (error) {
-            if(error.response){
-                Swal.fire({
-                    icon: 'error',
-                    title: `Error: ${ error?.response?.data?.detail[0]?.msg || error?.response?.data?.detail }`,
-                    toast: true,
-                    position: 'top',
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    closeOnConfirm: false,
-                    didOpen: (toast) => {
-                      const progressBar = toast.querySelector('.swal2-timer-progress-bar');
-                      if (progressBar) {
-                        progressBar.style.backgroundColor = 'black';
-                      }
-                      
-                      toast.addEventListener('mouseenter', Swal.stopTimer)
-                      toast.addEventListener('mouseleave', Swal.resumeTimer)
-                    }
-                });
-            } else if(error.request){
-                Swal.fire({
-                    icon: 'error',
-                    title: `Error: ${ error?.request?.data?.detail[0]?.msg || error?.request?.data?.detail }`,
-                    toast: true,
-                    position: 'top',
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    closeOnConfirm: false,
-                    didOpen: (toast) => {
-                      const progressBar = toast.querySelector('.swal2-timer-progress-bar');
-                      if (progressBar) {
-                        progressBar.style.backgroundColor = 'black';
-                      }
-                      
-                      toast.addEventListener('mouseenter', Swal.stopTimer)
-                      toast.addEventListener('mouseleave', Swal.resumeTimer)
-                    }
-                });
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: `Error! try again.`,
-                    toast: true,
-                    position: 'top',
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    closeOnConfirm: false,
-                    didOpen: (toast) => {
-                      const progressBar = toast.querySelector('.swal2-timer-progress-bar');
-                      if (progressBar) {
-                        progressBar.style.backgroundColor = 'black';
-                      }
-                      
-                      toast.addEventListener('mouseenter', Swal.stopTimer)
-                      toast.addEventListener('mouseleave', Swal.resumeTimer)
-                    }
-                });
-            }
+            toast.error(error.response?.data?.message || "Failed to update rider");
+            console.error("Error updating rider:", error);
         }
     };
 
@@ -344,134 +169,33 @@ const RiderManagement = () => {
             if (result.isConfirmed) {
                 try {
                     const response = await axios.delete(
-                        `${apiUrl}/api/user/${rider?.user_id}`,
+                        `${apiUrl}/riders/${rider?.user_id}`,
                         {
                             headers: {
-                                'Content-Type': 'application/json',
                                 'Authorization': `Bearer ${currentUser.access_token}`
                             }
                         }
                     );
 
                     if (response.status === 200) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: `Successful! `,
-                            toast: true,
-                            position: 'top',
-                            showConfirmButton: false,
-                            timer: 3000,
-                            timerProgressBar: true,
-                            closeOnConfirm: false,
-                            didOpen: (toast) => {
-                              const progressBar = toast.querySelector('.swal2-timer-progress-bar');
-                              if (progressBar) {
-                                progressBar.style.backgroundColor = 'green';
-                              }
-                              
-                              toast.addEventListener('mouseenter', Swal.stopTimer)
-                              toast.addEventListener('mouseleave', Swal.resumeTimer)
-                            }
-                        });      
+                        toast.success("Rider deleted successfully");
                         fetchRiders();
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: `Error! `,
-                            toast: true,
-                            position: 'top',
-                            showConfirmButton: false,
-                            timer: 3000,
-                            timerProgressBar: true,
-                            closeOnConfirm: false,
-                            didOpen: (toast) => {
-                              const progressBar = toast.querySelector('.swal2-timer-progress-bar');
-                              if (progressBar) {
-                                progressBar.style.backgroundColor = 'black';
-                              }
-                              
-                              toast.addEventListener('mouseenter', Swal.stopTimer)
-                              toast.addEventListener('mouseleave', Swal.resumeTimer)
-                            }
-                        });
                     }
                 } catch (error) {
-                    if(error.response){
-                        Swal.fire({
-                            icon: 'error',
-                            title: `Error: ${ error?.response?.data?.detail[0]?.msg || error?.response?.data?.detail }`,
-                            toast: true,
-                            position: 'top',
-                            showConfirmButton: false,
-                            timer: 3000,
-                            timerProgressBar: true,
-                            closeOnConfirm: false,
-                            didOpen: (toast) => {
-                              const progressBar = toast.querySelector('.swal2-timer-progress-bar');
-                              if (progressBar) {
-                                progressBar.style.backgroundColor = 'black';
-                              }
-                              
-                              toast.addEventListener('mouseenter', Swal.stopTimer)
-                              toast.addEventListener('mouseleave', Swal.resumeTimer)
-                            }
-                        });
-                    } else if(error.request){
-                        Swal.fire({
-                            icon: 'error',
-                            title: `Error: ${ error?.request?.data?.detail[0]?.msg || error?.request?.data?.detail }`,
-                            toast: true,
-                            position: 'top',
-                            showConfirmButton: false,
-                            timer: 3000,
-                            timerProgressBar: true,
-                            closeOnConfirm: false,
-                            didOpen: (toast) => {
-                              const progressBar = toast.querySelector('.swal2-timer-progress-bar');
-                              if (progressBar) {
-                                progressBar.style.backgroundColor = 'black';
-                              }
-                              
-                              toast.addEventListener('mouseenter', Swal.stopTimer)
-                              toast.addEventListener('mouseleave', Swal.resumeTimer)
-                            }
-                        });
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: `Error! try again.`,
-                            toast: true,
-                            position: 'top',
-                            showConfirmButton: false,
-                            timer: 3000,
-                            timerProgressBar: true,
-                            closeOnConfirm: false,
-                            didOpen: (toast) => {
-                              const progressBar = toast.querySelector('.swal2-timer-progress-bar');
-                              if (progressBar) {
-                                progressBar.style.backgroundColor = 'black';
-                              }
-                              
-                              toast.addEventListener('mouseenter', Swal.stopTimer)
-                              toast.addEventListener('mouseleave', Swal.resumeTimer)
-                            }
-                        });
-                    }
+                    toast.error(error.response?.data?.message || "Failed to delete rider");
+                    console.error("Error deleting rider:", error);
                 }
             }
         });
-    }; 
-    
+    };
 
     const resetNewRiderForm = () => {
         setNewRiderData({
             name: '',
             email: '',
             phone: '',
-            user_type: 'rider',
             license_number: '',
-            vehicle_registration: '',
-            vehicle_type: 'motorcycle'
+            vehicle_registration: ''
         });
     };
 
@@ -498,33 +222,20 @@ const RiderManagement = () => {
         },
         { 
             name: 'License No.', 
-            selector: row => row?.riders?.[0]?.license_number, 
+            selector: row => row?.rider?.license_number, 
             width: '15%' 
-        },
-        { 
-            name: 'Vehicle', 
-            cell: row => (
-                <span>
-                    {row?.riders?.[0]?.vehicle_type?.charAt(0).toUpperCase() + row?.riders?.[0]?.vehicle_type?.slice(1)} ({row?.riders?.[0]?.vehicle_registration})
-                </span>
-            ),
-            width: '15%'
         },
         { 
             name: 'Status', 
             cell: row => (
                 <span className={`px-2 py-1 rounded-full text-xs ${
-                    row?.disabled ? "bg-red-100 text-red-800" : "bg-green-100 text-green-800"
+                    row?.disabled === "false" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
                 }`}>
-                    {row?.disabled ? "Inactive" : "Active"}
+                    {row?.disabled === "false" ? "Active" : "Inactive"}
                 </span>
             ),
+            // width: '10%'
         },
-        { 
-            name: 'Registered At', 
-            selector: row => moment(row?.registered_at).format('LLL'), 
-            width: '15%' 
-        }, 
         { 
             name: 'Actions', 
             cell: row => (
@@ -546,10 +257,9 @@ const RiderManagement = () => {
                                 name: row?.name,
                                 email: row?.email,
                                 phone: row?.phone,
-                                disabled: row?.disabled,
-                                license_number: row?.riders?.[0]?.license_number,
-                                vehicle_registration: row?.riders?.[0]?.vehicle_registration,
-                                vehicle_type: row?.riders?.[0]?.vehicle_type || 'motorcycle'
+                                license_number: row?.rider?.license_number,
+                                vehicle_registration: row?.rider?.vehicle_registration,
+                                availability_status: row?.rider?.availability_status
                             });
                             setEditModal(true);
                         }}
@@ -564,12 +274,14 @@ const RiderManagement = () => {
                     </button>
                 </div>
             ),
-            width: '20%'
+            // width: '15%'
         }
     ];
 
     return (
         <div className="p-2">
+            {/* <h4 className="text-2xl font-bold mb-6 text-gray-800">Rider Management</h4> */}
+
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                 <Button 
                     className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
@@ -581,7 +293,7 @@ const RiderManagement = () => {
                     <input
                         type="text"
                         className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="Search Riders..."
+                        placeholder="Search riders..."
                         value={searchText}
                         onChange={handleSearch}
                     />
@@ -597,7 +309,7 @@ const RiderManagement = () => {
                 paginationTotalRows={totalRecords}
                 onChangePage={handlePageChange}
                 onChangeRowsPerPage={handlePerRowsChange}
-                paginationRowsPerPageOptions={[10, 20, 50, 100]}
+                paginationRowsPerPageOptions={[2, 10, 20, 50, 100, 1000]}
                 progressPending={loading}
                 persistTableHead
                 progressComponent={
@@ -682,28 +394,8 @@ const RiderManagement = () => {
                             required
                         />
                     </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Vehicle Type</label>
-                        <Select
-                            options={[
-                                { value: 'motorcycle', label: 'Motorcycle' },
-                                { value: 'car', label: 'Car' },
-                                { value: 'bicycle', label: 'Bicycle' },
-                                { value: 'truck', label: 'Truck' }
-                            ]}
-                            value={{
-                                value: newRiderData.vehicle_type,
-                                label: newRiderData.vehicle_type.charAt(0).toUpperCase() + newRiderData.vehicle_type.slice(1)
-                            }}
-                            onChange={(selected) => setNewRiderData({
-                                ...newRiderData,
-                                vehicle_type: selected.value
-                            })}
-                            className="basic-single"
-                            classNamePrefix="select"
-                        />
-                    </div>
                     <div className="flex justify-end space-x-3 pt-4">
+                        
                         <button 
                             type="button"
                             className="px-4 py-2 border border-gray-300 rounded text-gray-700 hover:bg-gray-50"
@@ -713,7 +405,7 @@ const RiderManagement = () => {
                         </button>
                         <button 
                             type="submit"
-                            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                            className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
                         >
                             Create Rider
                         </button>
@@ -755,24 +447,18 @@ const RiderManagement = () => {
                         </div>
                         <div>
                             <p className="text-sm text-gray-500">License Number</p>
-                            <p className="text-gray-800">{selectedRider?.riders?.[0]?.license_number}</p>
+                            <p className="text-gray-800">{selectedRider?.rider?.license_number}</p>
                         </div>
                         <div>
                             <p className="text-sm text-gray-500">Vehicle Registration</p>
-                            <p className="text-gray-800">{selectedRider?.riders?.[0]?.vehicle_registration}</p>
-                        </div>
-                        <div>
-                            <p className="text-sm text-gray-500">Vehicle Type</p>
-                            <p className="text-gray-800">
-                                {selectedRider?.riders?.[0]?.vehicle_type?.charAt(0).toUpperCase() + selectedRider?.riders?.[0]?.vehicle_type?.slice(1)}
-                            </p>
+                            <p className="text-gray-800">{selectedRider?.rider?.vehicle_registration}</p>
                         </div>
                         <div>
                             <p className="text-sm text-gray-500">Status</p>
                             <span className={`px-2 py-1 rounded-full text-xs ${
-                                selectedRider?.disabled ? "bg-red-100 text-red-800" : "bg-green-100 text-green-800"
+                                selectedRider?.disabled === "false" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
                             }`}>
-                                {selectedRider?.disabled ? "Inactive" : "Active"}
+                                {selectedRider?.disabled === "false" ? "Active" : "Inactive"}
                             </span>
                         </div>
                         <div>
@@ -784,7 +470,7 @@ const RiderManagement = () => {
                 
                 <div className="flex justify-end pt-6">
                     <button 
-                        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                        className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
                         onClick={() => setViewModal(false)}
                     >
                         Close
@@ -863,43 +549,21 @@ const RiderManagement = () => {
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Vehicle Type</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Availability Status</label>
                         <Select
                             options={[
-                                { value: 'motorcycle', label: 'Motorcycle' },
-                                { value: 'car', label: 'Car' },
-                                { value: 'bicycle', label: 'Bicycle' },
-                                { value: 'truck', label: 'Truck' }
+                                { value: 'available', label: 'Available' },
+                                { value: 'unavailable', label: 'Unavailable' },
+                                { value: 'on_delivery', label: 'On Delivery' }
                             ]}
                             value={{
-                                value: editRiderData.vehicle_type,
-                                label: editRiderData.vehicle_type?.charAt(0).toUpperCase() + editRiderData.vehicle_type?.slice(1)
+                                value: editRiderData.availability_status,
+                                label: editRiderData.availability_status?.replace('_', ' ')?.toUpperCase()
                             }}
                             onChange={(selected) => setEditRiderData({
                                 ...editRiderData, 
-                                vehicle_type: selected.value
+                                availability_status: selected.value
                             })}
-                            className="basic-single"
-                            classNamePrefix="select"
-                        />
-                    </div>
-                    
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Active Status</label>
-                        <Select
-                            options={[
-                                { value: false, label: 'Active' },
-                                { value: true, label: 'Inactive' }
-                            ]}
-                            value={{
-                                value: editRiderData.disabled,
-                                label: editRiderData.disabled ? 'Inactive' : 'Active'
-                            }}
-                            onChange={(selected) => { setEditRiderData({
-                                ...editRiderData, 
-                                disabled: selected.value
-                                })
-                            }}
                             className="basic-single"
                             classNamePrefix="select"
                         />
@@ -914,7 +578,7 @@ const RiderManagement = () => {
                         </button>
                         <button 
                             type="submit"
-                            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                            className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
                         >
                             Update Rider
                         </button>
