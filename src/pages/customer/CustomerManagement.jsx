@@ -221,11 +221,6 @@ const CustomerManagement = () => {
             width: '15%' 
         },
         { 
-            name: 'License No.', 
-            selector: row => row?.rider?.license_number, 
-            width: '15%' 
-        },
-        { 
             name: 'Status', 
             cell: row => (
                 <span className={`px-2 py-1 rounded-full text-xs ${
