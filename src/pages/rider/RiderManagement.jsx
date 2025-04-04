@@ -505,7 +505,7 @@ const RiderManagement = () => {
             name: 'Vehicle', 
             cell: row => (
                 <span>
-                    {row?.riders?.[0]?.vehicle_type?.charAt(0)?.toUpperCase() + row?.riders?.[0]?.vehicle_type?.slice(1)} ({row?.riders?.[0]?.vehicle_registration})
+                    {row?.riders?.[0]?.vehicle_registration}
                 </span>
             ),
             width: '15%'
