@@ -14,7 +14,11 @@ const SupportTickets = () => {
                 <div className="justify-center p-6 text-center text-3xl font-bold text-white md:text-4xl lg:text-5xl">
                     Ticket Management
                 </div>
-                <p>fff</p>
+                <p className="justify-center p-0 text-center text-1xl text-white " > 
+                    {
+                        params.get('name') ? params.get('name') : ""
+                    }
+                </p>
             </div>
 
             <Card className="mx-0 -mt-36 mb-6 lg:mx-4 border border-blue-gray-100">                
