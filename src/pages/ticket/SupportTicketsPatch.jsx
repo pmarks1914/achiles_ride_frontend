@@ -10,7 +10,7 @@ let currentUser = JSON.parse(localStorage.getItem("userDataStore"));
 
 const apiUrl = import.meta.env.VITE_API_URL_BASE_API;
 
-const SupportTicketsManagement = () => {
+const SupportTicketsPatch = () => {
     const [tableData, setTableData] = useState([]);
     const [totalRecords, setTotalRecords] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
@@ -534,4 +534,4 @@ const SupportTicketsManagement = () => {
     );
 };
 
-export default SupportTicketsManagement;
+export default SupportTicketsPatch;
