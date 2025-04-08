@@ -286,12 +286,7 @@ const SupportTicketsPatch = () => {
                     >
                         Edit
                     </button>
-                    <button 
-                        className="m-1 px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm"
-                        onClick={() => handleDeleteTicket(row)}
-                    >
-                        Delete
-                    </button>
+                    
                 </div>
             ),
             width: '20%'
@@ -301,12 +296,7 @@ const SupportTicketsPatch = () => {
     return (
         <div className="p-2">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-                <Button 
-                    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
-                    onClick={() => setCreateModal(true)}
-                >
-                    Create New Ticket
-                </Button>
+                
                 <div className="w-full md:w-64">
                     <input
                         type="text"
@@ -343,67 +333,6 @@ const SupportTicketsPatch = () => {
                 className="border rounded-lg overflow-hidden"
             />
 
-            {/* Create Ticket Modal */}
-            <aside
-                className={`fixed top-0 right-0 z-50 h-screen w-96 bg-white px-6 shadow-lg transition-transform duration-300 ${
-                    createModal ? "translate-x-0" : "translate-x-full"
-                }`}
-            >
-                <div className="flex items-start justify-between pt-8 pb-6">
-                    <div>
-                        <h5 className="text-xl font-semibold text-gray-800">Create New Ticket</h5>
-                    </div>
-                    <button
-                        className="text-gray-500 hover:text-gray-700"
-                        onClick={() => setCreateModal(false)}
-                    >
-                        <XMarkIcon className="h-5 w-5" />
-                    </button>
-                </div>
-                
-                <form onSubmit={handleCreateTicket} className="space-y-4">
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Issue Description</label>
-                        <textarea
-                            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            value={newTicketData.issue_description}
-                            onChange={(e) => setNewTicketData({...newTicketData, issue_description: e.target.value})}
-                            required
-                            rows={5}
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                        <select
-                            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            value={newTicketData.status}
-                            onChange={(e) => setNewTicketData({...newTicketData, status: e.target.value})}
-                            required
-                        >
-                            {statusOptions.map(option => (
-                                <option key={option.value} value={option.value}>
-                                    {option.label}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="flex justify-end space-x-3 pt-4">
-                        <button 
-                            type="button"
-                            className="px-4 py-2 border border-gray-300 rounded text-gray-700 hover:bg-gray-50"
-                            onClick={() => setCreateModal(false)}
-                        >
-                            Cancel
-                        </button>
-                        <button 
-                            type="submit"
-                            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-                        >
-                            Create Ticket
-                        </button>
-                    </div>
-                </form>
-            </aside>
 
             {/* View Ticket Modal */}
             <aside
