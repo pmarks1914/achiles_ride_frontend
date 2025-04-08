@@ -1,9 +1,10 @@
 import React from 'react';
+import ChatContainer from './ChatContainer';
 
 const RideToday = () => {
     return (
         <div>
-             d
+             <ChatContainer />
         </div>
     );
 };

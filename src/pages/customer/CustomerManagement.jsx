@@ -4,14 +4,12 @@ import moment from 'moment';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import DataTable from 'react-data-table-component';
 import Swal from 'sweetalert2';
-import Select from 'react-select';
 import { toast } from 'react-toastify';
 import { Button } from '@material-tailwind/react';
 
 let currentUser = JSON.parse(localStorage.getItem("userDataStore"));
 
 const apiUrl = import.meta.env.VITE_API_URL_BASE_API;
-
 
 const CustomerManagement = () => {
     const [tableData, setTableData] = useState([]);
@@ -33,31 +31,32 @@ const CustomerManagement = () => {
     });
 
     // Form data
-    const [newRiderData, setNewRiderData] = useState({
+    const [newCustomerData, setNewCustomerData] = useState({
         name: '',
         email: '',
         phone: '',
-        license_number: '',
-        vehicle_registration: ''
+        user_type: 'customer',
+        password: ''
     });
     
-    const [selectedRider, setSelectedRider] = useState(null);
-    const [editRiderData, setEditRiderData] = useState({});
+    const [selectedCustomer, setSelectedCustomer] = useState(null);
+    const [editCustomerData, setEditCustomerData] = useState({});
 
     useEffect(() => {
-        fetchRiders();
+        fetchCustomers();
     }, [currentPage, pageSize, searchText]);
 
-    const fetchRiders = async () => {
+    const fetchCustomers = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`${apiUrl}/api/user/?user_type=customer`, {
+            const response = await axios.get(`${apiUrl}/api/user/`, {
                 params: {
                     page: currentPage,
                     per_page: pageSize,
                     start_date: dateRange[0] ? moment(dateRange[0]).format('YYYY-MM-DD') : null,
                     end_date: dateRange[1] ? moment(dateRange[1]).format('YYYY-MM-DD') : null,
-                    search: searchText
+                    search: searchText,
+                    user_type: 'customer'
                 },
                 headers: {
                     'Content-Type': 'application/json',
@@ -66,16 +65,14 @@ const CustomerManagement = () => {
             });            
 
             if (response?.status === 200) {
-                // console.log("response >>", response?.data)
-
                 const { current_page, has_next, has_previous, total_items, page_size, total_pages, items } = response?.data;
                 setTableData(items);
                 setTotalRecords(total_items);
                 setPagination({ next: has_next, previous: has_previous });
             }
         } catch (error) {
-            toast.error("Error fetching riders data");
-            console.error("Error fetching riders:", error);
+            toast.error("Error fetching customer data");
+            console.error("Error fetching customers:", error);
         }
         setLoading(false);
     };
@@ -93,16 +90,17 @@ const CustomerManagement = () => {
         setSearchText(e.target.value);
     };
 
-    const handleCreateRider = async (e) => {
+    const handleCreateCustomer = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(`${apiUrl}/riders`, 
+            const response = await axios.post(`${apiUrl}/api/user/customers/`, 
                 {
-                    name: newRiderData.name,
-                    email: newRiderData.email,
-                    phone: newRiderData.phone,
-                    license_number: newRiderData.license_number,
-                    vehicle_registration: newRiderData.vehicle_registration
+                    name: newCustomerData.name,
+                    email: newCustomerData.email,
+                    phone: newCustomerData.phone,
+                    user_type: 'customer',
+                    password: newCustomerData.password || `${newCustomerData.email}${newCustomerData.phone}`,
+                    disabled: false
                 },
                 {
                     headers: {
@@ -112,30 +110,105 @@ const CustomerManagement = () => {
                 }
             );
 
-            if (response.status === 201) {
-                toast.success("Customer created successfully");
+            if (response.status === 200 || response.status === 201) {
+                Swal.fire({
+                    icon: 'success',
+                    title: `Successful! `,
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    closeOnConfirm: false,
+                    didOpen: (toast) => {
+                      const progressBar = toast.querySelector('.swal2-timer-progress-bar');
+                      if (progressBar) {
+                        progressBar.style.backgroundColor = 'green';
+                      }
+                      
+                      toast.addEventListener('mouseenter', Swal.stopTimer)
+                      toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                });
                 setCreateModal(false);
-                fetchRiders();
-                resetNewRiderForm();
+                fetchCustomers();
+                resetNewCustomerForm();
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: `Error! `,
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    closeOnConfirm: false,
+                    didOpen: (toast) => {
+                      const progressBar = toast.querySelector('.swal2-timer-progress-bar');
+                      if (progressBar) {
+                        progressBar.style.backgroundColor = 'black';
+                      }
+                      
+                      toast.addEventListener('mouseenter', Swal.stopTimer)
+                      toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                });
             }
         } catch (error) {
-            toast.error(error.response?.data?.message || "Failed to create rider");
-            console.error("Error creating rider:", error);
+            if(error.response){
+                Swal.fire({
+                    icon: 'error',
+                    title: `Error: ${ error?.response?.data?.detail[0]?.msg || error?.response?.data?.detail }`,
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    closeOnConfirm: false,
+                    didOpen: (toast) => {
+                      const progressBar = toast.querySelector('.swal2-timer-progress-bar');
+                      if (progressBar) {
+                        progressBar.style.backgroundColor = 'black';
+                      }
+                      
+                      toast.addEventListener('mouseenter', Swal.stopTimer)
+                      toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                });
+            } else if(error.request){
+                Swal.fire({
+                    icon: 'error',
+                    title: `Error: ${ error?.request?.data?.detail[0]?.msg || error?.request?.data?.detail }`,
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    closeOnConfirm: false,
+                    didOpen: (toast) => {
+                      const progressBar = toast.querySelector('.swal2-timer-progress-bar');
+                      if (progressBar) {
+                        progressBar.style.backgroundColor = 'black';
+                      }
+                      
+                      toast.addEventListener('mouseenter', Swal.stopTimer)
+                      toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                });
+            }
         }
     };
 
-    const handleUpdateRider = async (e) => {
+    const handleUpdateCustomer = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.put(
-                `${apiUrl}/riders/${selectedRider?.user_id}`,
+            const response = await axios.patch(
+                `${apiUrl}/api/user/${selectedCustomer?.user_id}`,
                 {
-                    name: editRiderData.name,
-                    email: editRiderData.email,
-                    phone: editRiderData.phone,
-                    license_number: editRiderData.license_number,
-                    vehicle_registration: editRiderData.vehicle_registration,
-                    availability_status: editRiderData.availability_status
+                    name: editCustomerData.name,
+                    phone: editCustomerData.phone,
+                    user_type: 'customer',
+                    disabled: editCustomerData.disabled
                 },
                 {
                     headers: {
@@ -146,20 +219,117 @@ const CustomerManagement = () => {
             );
 
             if (response.status === 200) {
-                toast.success("Customer updated successfully");
+                Swal.fire({
+                    icon: 'success',
+                    title: `Successful! `,
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    closeOnConfirm: false,
+                    didOpen: (toast) => {
+                      const progressBar = toast.querySelector('.swal2-timer-progress-bar');
+                      if (progressBar) {
+                        progressBar.style.backgroundColor = 'green';
+                      }
+                      
+                      toast.addEventListener('mouseenter', Swal.stopTimer)
+                      toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                });
                 setEditModal(false);
-                fetchRiders();
+                fetchCustomers();
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: `Error! `,
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    closeOnConfirm: false,
+                    didOpen: (toast) => {
+                      const progressBar = toast.querySelector('.swal2-timer-progress-bar');
+                      if (progressBar) {
+                        progressBar.style.backgroundColor = 'black';
+                      }
+                      
+                      toast.addEventListener('mouseenter', Swal.stopTimer)
+                      toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                });
             }
         } catch (error) {
-            toast.error(error.response?.data?.message || "Failed to update rider");
-            console.error("Error updating rider:", error);
+            if(error.response){
+                Swal.fire({
+                    icon: 'error',
+                    title: `Error: ${ error?.response?.data?.detail[0]?.msg || error?.response?.data?.detail }`,
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    closeOnConfirm: false,
+                    didOpen: (toast) => {
+                      const progressBar = toast.querySelector('.swal2-timer-progress-bar');
+                      if (progressBar) {
+                        progressBar.style.backgroundColor = 'black';
+                      }
+                      
+                      toast.addEventListener('mouseenter', Swal.stopTimer)
+                      toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                });
+            } else if(error.request){
+                Swal.fire({
+                    icon: 'error',
+                    title: `Error: ${ error?.request?.data?.detail[0]?.msg || error?.request?.data?.detail }`,
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    closeOnConfirm: false,
+                    didOpen: (toast) => {
+                      const progressBar = toast.querySelector('.swal2-timer-progress-bar');
+                      if (progressBar) {
+                        progressBar.style.backgroundColor = 'black';
+                      }
+                      
+                      toast.addEventListener('mouseenter', Swal.stopTimer)
+                      toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: `Error! try again.`,
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    closeOnConfirm: false,
+                    didOpen: (toast) => {
+                      const progressBar = toast.querySelector('.swal2-timer-progress-bar');
+                      if (progressBar) {
+                        progressBar.style.backgroundColor = 'black';
+                      }
+                      
+                      toast.addEventListener('mouseenter', Swal.stopTimer)
+                      toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                });
+            }
         }
     };
 
-    const handleDeleteRider = (rider) => {
+    const handleDeleteCustomer = (customer) => {
         Swal.fire({
             title: 'Are you sure?',
-            text: `You are about to delete ${rider?.name}`,
+            text: `You are about to delete ${customer?.name}`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -169,33 +339,132 @@ const CustomerManagement = () => {
             if (result.isConfirmed) {
                 try {
                     const response = await axios.delete(
-                        `${apiUrl}/riders/${rider?.user_id}`,
+                        `${apiUrl}/api/user/${customer?.user_id}`,
                         {
                             headers: {
+                                'Content-Type': 'application/json',
                                 'Authorization': `Bearer ${currentUser.access_token}`
                             }
                         }
                     );
 
                     if (response.status === 200) {
-                        toast.success("Customer deleted successfully");
-                        fetchRiders();
+                        Swal.fire({
+                            icon: 'success',
+                            title: `Successful! `,
+                            toast: true,
+                            position: 'top',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            closeOnConfirm: false,
+                            didOpen: (toast) => {
+                              const progressBar = toast.querySelector('.swal2-timer-progress-bar');
+                              if (progressBar) {
+                                progressBar.style.backgroundColor = 'green';
+                              }
+                              
+                              toast.addEventListener('mouseenter', Swal.stopTimer)
+                              toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        });      
+                        fetchCustomers();
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: `Error! `,
+                            toast: true,
+                            position: 'top',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            closeOnConfirm: false,
+                            didOpen: (toast) => {
+                              const progressBar = toast.querySelector('.swal2-timer-progress-bar');
+                              if (progressBar) {
+                                progressBar.style.backgroundColor = 'black';
+                              }
+                              
+                              toast.addEventListener('mouseenter', Swal.stopTimer)
+                              toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        });
                     }
                 } catch (error) {
-                    toast.error(error.response?.data?.message || "Failed to delete rider");
-                    console.error("Error deleting rider:", error);
+                    if(error.response){
+                        Swal.fire({
+                            icon: 'error',
+                            title: `Error: ${ error?.response?.data?.detail[0]?.msg || error?.response?.data?.detail }`,
+                            toast: true,
+                            position: 'top',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            closeOnConfirm: false,
+                            didOpen: (toast) => {
+                              const progressBar = toast.querySelector('.swal2-timer-progress-bar');
+                              if (progressBar) {
+                                progressBar.style.backgroundColor = 'black';
+                              }
+                              
+                              toast.addEventListener('mouseenter', Swal.stopTimer)
+                              toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        });
+                    } else if(error.request){
+                        Swal.fire({
+                            icon: 'error',
+                            title: `Error: ${ error?.request?.data?.detail[0]?.msg || error?.request?.data?.detail }`,
+                            toast: true,
+                            position: 'top',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            closeOnConfirm: false,
+                            didOpen: (toast) => {
+                              const progressBar = toast.querySelector('.swal2-timer-progress-bar');
+                              if (progressBar) {
+                                progressBar.style.backgroundColor = 'black';
+                              }
+                              
+                              toast.addEventListener('mouseenter', Swal.stopTimer)
+                              toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: `Error! try again.`,
+                            toast: true,
+                            position: 'top',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            closeOnConfirm: false,
+                            didOpen: (toast) => {
+                              const progressBar = toast.querySelector('.swal2-timer-progress-bar');
+                              if (progressBar) {
+                                progressBar.style.backgroundColor = 'black';
+                              }
+                              
+                              toast.addEventListener('mouseenter', Swal.stopTimer)
+                              toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        });
+                    }
                 }
             }
         });
-    };
+    }; 
+    
 
-    const resetNewRiderForm = () => {
-        setNewRiderData({
+    const resetNewCustomerForm = () => {
+        setNewCustomerData({
             name: '',
             email: '',
             phone: '',
-            license_number: '',
-            vehicle_registration: ''
+            user_type: 'customer',
+            password: ''
         });
     };
 
@@ -224,13 +493,17 @@ const CustomerManagement = () => {
             name: 'Status', 
             cell: row => (
                 <span className={`px-2 py-1 rounded-full text-xs ${
-                    row?.disabled === "false" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                    row?.disabled ? "bg-red-100 text-red-800" : "bg-green-100 text-green-800"
                 }`}>
-                    {row?.disabled === "false" ? "Active" : "Inactive"}
+                    {row?.disabled ? "Inactive" : "Active"}
                 </span>
             ),
-            // width: '10%'
         },
+        { 
+            name: 'Registered At', 
+            selector: row => moment(row?.registered_at).format('LLL'), 
+            width: '15%' 
+        }, 
         { 
             name: 'Actions', 
             cell: row => (
@@ -238,7 +511,7 @@ const CustomerManagement = () => {
                     <button 
                         className="m-1 px-3 py-1 bg-gray-500 text-white rounded hover:bg-gray-600 text-sm"
                         onClick={() => {
-                            setSelectedRider(row);
+                            setSelectedCustomer(row);
                             setViewModal(true);
                         }}
                     >
@@ -247,14 +520,12 @@ const CustomerManagement = () => {
                     <button 
                         className="m-1 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm"
                         onClick={() => {
-                            setSelectedRider(row);
-                            setEditRiderData({
+                            setSelectedCustomer(row);
+                            setEditCustomerData({
                                 name: row?.name,
                                 email: row?.email,
                                 phone: row?.phone,
-                                license_number: row?.rider?.license_number,
-                                vehicle_registration: row?.rider?.vehicle_registration,
-                                availability_status: row?.rider?.availability_status
+                                disabled: row?.disabled
                             });
                             setEditModal(true);
                         }}
@@ -263,20 +534,18 @@ const CustomerManagement = () => {
                     </button>
                     <button 
                         className="m-1 px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm"
-                        onClick={() => handleDeleteRider(row)}
+                        onClick={() => handleDeleteCustomer(row)}
                     >
                         Delete
                     </button>
                 </div>
             ),
-            // width: '15%'
+            width: '20%'
         }
     ];
 
     return (
         <div className="p-2">
-            {/* <h4 className="text-2xl font-bold mb-6 text-gray-800">Customer Management</h4> */}
-
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                 <Button 
                     className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
@@ -288,7 +557,7 @@ const CustomerManagement = () => {
                     <input
                         type="text"
                         className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="Search riders..."
+                        placeholder="Search Customers..."
                         value={searchText}
                         onChange={handleSearch}
                     />
@@ -304,7 +573,7 @@ const CustomerManagement = () => {
                 paginationTotalRows={totalRecords}
                 onChangePage={handlePageChange}
                 onChangeRowsPerPage={handlePerRowsChange}
-                paginationRowsPerPageOptions={[2, 10, 20, 50, 100, 1000]}
+                paginationRowsPerPageOptions={[10, 20, 50, 100]}
                 progressPending={loading}
                 persistTableHead
                 progressComponent={
@@ -338,14 +607,14 @@ const CustomerManagement = () => {
                     </button>
                 </div>
                 
-                <form onSubmit={handleCreateRider} className="space-y-4">
+                <form onSubmit={handleCreateCustomer} className="space-y-4">
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
                         <input
                             type="text"
                             className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            value={newRiderData.name}
-                            onChange={(e) => setNewRiderData({...newRiderData, name: e.target.value})}
+                            value={newCustomerData.name}
+                            onChange={(e) => setNewCustomerData({...newCustomerData, name: e.target.value})}
                             required
                         />
                     </div>
@@ -354,8 +623,8 @@ const CustomerManagement = () => {
                         <input
                             type="email"
                             className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            value={newRiderData.email}
-                            onChange={(e) => setNewRiderData({...newRiderData, email: e.target.value})}
+                            value={newCustomerData.email}
+                            onChange={(e) => setNewCustomerData({...newCustomerData, email: e.target.value})}
                             required
                         />
                     </div>
@@ -364,13 +633,22 @@ const CustomerManagement = () => {
                         <input
                             type="text"
                             className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            value={newRiderData.phone}
-                            onChange={(e) => setNewRiderData({...newRiderData, phone: e.target.value})}
+                            value={newCustomerData.phone}
+                            onChange={(e) => setNewCustomerData({...newCustomerData, phone: e.target.value})}
                             required
                         />
                     </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                        <input
+                            type="password"
+                            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            value={newCustomerData.password}
+                            onChange={(e) => setNewCustomerData({...newCustomerData, password: e.target.value})}
+                            placeholder="Leave blank to use default (email+phone)"
+                        />
+                    </div>
                     <div className="flex justify-end space-x-3 pt-4">
-                        
                         <button 
                             type="button"
                             className="px-4 py-2 border border-gray-300 rounded text-gray-700 hover:bg-gray-50"
@@ -380,7 +658,7 @@ const CustomerManagement = () => {
                         </button>
                         <button 
                             type="submit"
-                            className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
+                            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
                         >
                             Create Customer
                         </button>
@@ -406,38 +684,38 @@ const CustomerManagement = () => {
                     </button>
                 </div>
                 
-                {selectedRider && (
+                {selectedCustomer && (
                     <div className="space-y-4">
                         <div>
                             <p className="text-sm text-gray-500">Name</p>
-                            <p className="text-gray-800">{selectedRider?.name}</p>
+                            <p className="text-gray-800">{selectedCustomer?.name}</p>
                         </div>
                         <div>
                             <p className="text-sm text-gray-500">Email</p>
-                            <p className="text-gray-800">{selectedRider?.email}</p>
+                            <p className="text-gray-800">{selectedCustomer?.email}</p>
                         </div>
                         <div>
                             <p className="text-sm text-gray-500">Phone</p>
-                            <p className="text-gray-800">{selectedRider?.phone}</p>
-                        </div>                        
+                            <p className="text-gray-800">{selectedCustomer?.phone}</p>
+                        </div>
                         <div>
                             <p className="text-sm text-gray-500">Status</p>
                             <span className={`px-2 py-1 rounded-full text-xs ${
-                                selectedRider?.disabled === "false" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                                selectedCustomer?.disabled ? "bg-red-100 text-red-800" : "bg-green-100 text-green-800"
                             }`}>
-                                {selectedRider?.disabled === "false" ? "Active" : "Inactive"}
+                                {selectedCustomer?.disabled ? "Inactive" : "Active"}
                             </span>
                         </div>
                         <div>
                             <p className="text-sm text-gray-500">Registered At</p>
-                            <p className="text-gray-800">{moment(selectedRider?.registered_at).format('LLL')}</p>
+                            <p className="text-gray-800">{moment(selectedCustomer?.registered_at).format('LLL')}</p>
                         </div>
                     </div>
                 )}
                 
                 <div className="flex justify-end pt-6">
                     <button 
-                        className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
+                        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
                         onClick={() => setViewModal(false)}
                     >
                         Close
@@ -463,14 +741,14 @@ const CustomerManagement = () => {
                     </button>
                 </div>
                 
-                <form onSubmit={handleUpdateRider} className="space-y-4">
+                <form onSubmit={handleUpdateCustomer} className="space-y-4">
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
                         <input
                             type="text"
                             className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            value={editRiderData.name}
-                            onChange={(e) => setEditRiderData({...editRiderData, name: e.target.value})}
+                            value={editCustomerData.name}
+                            onChange={(e) => setEditCustomerData({...editCustomerData, name: e.target.value})}
                             required
                         />
                     </div>
@@ -479,8 +757,8 @@ const CustomerManagement = () => {
                         <input
                             type="email"
                             className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-100"
-                            value={editRiderData.email}
-                            onChange={(e) => setEditRiderData({...editRiderData, email: e.target.value})}
+                            value={editCustomerData.email}
+                            onChange={(e) => setEditCustomerData({...editCustomerData, email: e.target.value})}
                             required
                             disabled
                         />
@@ -490,30 +768,27 @@ const CustomerManagement = () => {
                         <input
                             type="text"
                             className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            value={editRiderData.phone}
-                            onChange={(e) => setEditRiderData({...editRiderData, phone: e.target.value})}
+                            value={editCustomerData.phone}
+                            onChange={(e) => setEditCustomerData({...editCustomerData, phone: e.target.value})}
                             required
                         />
                     </div>
+                    
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Availability Status</label>
-                        <Select
-                            options={[
-                                { value: 'available', label: 'Available' },
-                                { value: 'unavailable', label: 'Unavailable' },
-                                { value: 'on_delivery', label: 'On Delivery' }
-                            ]}
-                            value={{
-                                value: editRiderData.availability_status,
-                                label: editRiderData.availability_status?.replace('_', ' ')?.toUpperCase()
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Active Status</label>
+                        <select
+                            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            value={editCustomerData.disabled ? 'inactive' : 'active'}
+                            onChange={(e) => { 
+                                setEditCustomerData({
+                                    ...editCustomerData, 
+                                    disabled: e.target.value === 'inactive'
+                                })
                             }}
-                            onChange={(selected) => setEditRiderData({
-                                ...editRiderData, 
-                                availability_status: selected.value
-                            })}
-                            className="basic-single"
-                            classNamePrefix="select"
-                        />
+                        >
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
                     </div>
                     <div className="flex justify-end space-x-3 pt-4">
                         <button 
@@ -525,7 +800,7 @@ const CustomerManagement = () => {
                         </button>
                         <button 
                             type="submit"
-                            className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
+                            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
                         >
                             Update Customer
                         </button>

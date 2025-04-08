@@ -4,7 +4,7 @@ import {
   UserGroupIcon,
   UserPlusIcon,
   CircleStackIcon,
-  TableCellsIcon, 
+  TableCellsIcon,
   InformationCircleIcon,
   ServerStackIcon,
   RectangleStackIcon,
@@ -16,6 +16,8 @@ import { SignIn, SignUp } from "@/pages/auth";
 import Rider from "./pages/rider/rider";
 import Customer from "./pages/customer/customer";
 import Staff from "./pages/staff/staff";
+import SupportTickets from "./pages/ticket/SupportTickets";
+import RideToday from "./pages/ride/RideToday";
 
 const icon = {
   className: "w-5 h-5 text-inherit",
@@ -44,10 +46,10 @@ export const routes = [
         element: <Rider />,
       },
       {
-        icon: <CircleStackIcon {...icon} />,
-        name: "ride",
-        path: "/ride",
-        element: <Profile />,
+        icon: <TicketIcon {...icon} />,
+        name: "ticket",
+        path: "/ticket",
+        element: <SupportTickets />,
       },
       // {
       //   icon: <TableCellsIcon {...icon} />,
@@ -64,6 +66,23 @@ export const routes = [
     ],
   },
   {
+    title: "Ride",
+    layout: "dashboard",
+    pages: [
+      {
+        icon: <ServerStackIcon {...icon} />,
+        name: "ride today",
+        path: "/ride-today",
+        element: <RideToday />,
+      },
+      {
+        icon: <CircleStackIcon {...icon} />,
+        name: "all ride ",
+        path: "/all-ride",
+        element: <Profile />,
+      }]
+  },
+  {
     title: "Internal",
     layout: "dashboard",
     pages: [
@@ -73,18 +92,12 @@ export const routes = [
         path: "/staff",
         element: <Staff />,
       },
-      {
-        icon: <TicketIcon {...icon} />,
-        name: "ticket",
-        path: "/ticket",
-        // element: <SignUp />,
-      },
-      {
-        icon: <Cog6ToothIcon {...icon} />,
-        name: "setting",
-        path: "/setting",
-        // element: <SignUp />,
-      },
+      // {
+      //   icon: <Cog6ToothIcon {...icon} />,
+      //   name: "setting",
+      //   path: "/setting",
+      //   // element: <SignUp />,
+      // },
     ],
   },
 ];
