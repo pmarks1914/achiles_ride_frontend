@@ -538,7 +538,7 @@ const CustomerManagement = () => {
                     >
                         Delete
                     </button>
-                    <a href={`/dashboard/ticket?userId=${row?.user_id}&name=${row?.name}&email=${row?.email}`} > Ticket </a>
+                    <a href={`/dashboard/ticket?userId=${row?.user_id}&name=${row?.name}&email=${row?.email}`} target='_blank'> Ticket </a>
                 </div>
             ),
             width: '20%'
