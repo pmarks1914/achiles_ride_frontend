@@ -16,17 +16,17 @@ const SupportTickets = () => {
                 </div>
                 {
                     params.get('name') ?
-                        <div> 
-                        <p className="justify-center p-0 text-center text-1xl text-white " >
-                        { params.get('name') }
-                        </p>
+                        <div>
                             <p className="justify-center p-0 text-center text-1xl text-white " >
-                            { params.get('name') }
+                                {params.get('name')}
                             </p>
                             <p className="justify-center p-0 text-center text-1xl text-white " >
-                            { params.get('name') }
+                                {params.get('email')}
                             </p>
-                        </div> 
+                            <p className="justify-center p-0 text-center text-1xl text-white " >
+                                {params.get('name')}
+                            </p>
+                        </div>
                         : ""
                 }
             </div>
@@ -34,7 +34,7 @@ const SupportTickets = () => {
             <Card className="mx-0 -mt-36 mb-6 lg:mx-4 border border-blue-gray-100">
                 {
                     params.get('userId') ?
-                        <SupportTicketsPatch />
+                        <SupportTicketsPatch userId={params.get('userId')} />
                         : <SupportTicketsManagement />
                 }
 

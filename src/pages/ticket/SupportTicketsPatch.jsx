@@ -10,7 +10,8 @@ let currentUser = JSON.parse(localStorage.getItem("userDataStore"));
 
 const apiUrl = import.meta.env.VITE_API_URL_BASE_API;
 
-const SupportTicketsPatch = () => {
+const SupportTicketsPatch = (props) => {
+    // console.log(props?.userId, "llll")
     const [tableData, setTableData] = useState([]);
     const [totalRecords, setTotalRecords] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
@@ -41,6 +42,7 @@ const SupportTicketsPatch = () => {
         try {
             const response = await axios.get(`${apiUrl}/api/support_tickets/`, {
                 params: {
+                    user_id: props?.userId,
                     page: currentPage,
                     per_page: pageSize,
                     search: searchText
