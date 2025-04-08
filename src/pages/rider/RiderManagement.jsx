@@ -562,7 +562,7 @@ const RiderManagement = () => {
                     >
                         Delete
                     </button>
-                    <a href={`/dashboard/ticket?userId=${row?.user_id}&name=${row?.name}&email=${row?.email}&`} className='text-blue-500' target='_blank'> Ticket </a>
+                    <a href={`/dashboard/ticket?userId=${row?.user_id}&name=${row?.name}&email=${row?.email}&userType=${row?.user_type}`} className='text-blue-500' target='_blank'> Ticket </a>
                 </div>
             ),
             width: '20%'
