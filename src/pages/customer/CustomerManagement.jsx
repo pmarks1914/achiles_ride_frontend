@@ -538,11 +538,14 @@ const CustomerManagement = () => {
                     >
                         Delete
                     </button>
+                    <a href={`/dashboard/ticket?userId=${row?.user_id}&name=${row?.name}&email=${row?.email}`} > Ticket </a>
                 </div>
             ),
             width: '20%'
         }
     ];
+
+    // http://localhost:5173/dashboard/ticket?user=2&name=joe
 
     return (
         <div className="p-2">
