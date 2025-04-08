@@ -4,7 +4,7 @@ import SupportTicketsManagement from './SupportTicketsManagement';
 
 const SupportTickets = () => {
 
-
+    console.log(window.location.pathname.split('/')[2])
     return (
         <div>
             <div className="relative mt-8 h-72 w-full overflow-hidden rounded-xl bg-[url('/img/background-image.png')] bg-cover bg-center shadow-lg transition-all duration-300 hover:shadow-xl">
