@@ -7,7 +7,6 @@ const SupportTickets = () => {
     const search = window.location.search; 
     const params = new URLSearchParams(search)
 
-    console.log(params.get('user')) 
     return (
         <div>
             <div className="relative mt-8 h-72 w-full overflow-hidden rounded-xl bg-[url('/img/background-image.png')] bg-cover bg-center shadow-lg transition-all duration-300 hover:shadow-xl">
@@ -23,7 +22,7 @@ const SupportTickets = () => {
 
             <Card className="mx-0 -mt-36 mb-6 lg:mx-4 border border-blue-gray-100">                
                 {
-                    params.get('user') ?
+                    params.get('userId') ?
                     <SupportTicketsPatch />
                     : <SupportTicketsManagement />
                 }
