@@ -90,7 +90,7 @@ export function Home() {
       description: "Last 6 Days Payment Trends",
       footer: "updated 1 min ago",
       chart: {
-        type: "bar",
+        type: "line",
         height: 300,
         series: [
           {
@@ -199,7 +199,7 @@ export function Home() {
           />
         ))}
       </div>
-      <div className="mb-6 grid grid-cols-1 gap-y-12 gap-x-6 md:grid-cols-12 xl:grid-cols-3">
+      <div className="mb-6 grid grid-cols-1 gap-y-12 gap-x-6 md:grid-cols-2 xl:grid-cols-2">
         {statisticsChartsData.map((props) => (
           <StatisticsChart
             key={props.title}
