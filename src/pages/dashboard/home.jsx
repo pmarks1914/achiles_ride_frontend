@@ -207,7 +207,7 @@ export function Home() {
 
   return (
     <div className="mt-3">
-      <div className="mb-12 grid gap-y-10 gap-x-6 md:grid-cols-2 xl:grid-cols-4">
+      <div className="mb-6 grid gap-y-10 gap-x-6 md:grid-cols-2 xl:grid-cols-4">
         {statisticsCardsData.map(({ icon, title, footer, ...rest }) => (
           <StatisticsCard
             key={title}
@@ -303,6 +303,8 @@ export function Home() {
                 {[
                   { status: "Completed", count: statsDetails?.today_rides_status?.completed || 0 },
                   { status: "In Progress", count: statsDetails?.today_rides_status?.in_progress || 0 },
+                  { status: "requested", count: statsDetails?.today_rides_status?.requested || 0 },
+                  { status: "accepted", count: statsDetails?.today_rides_status?.accepted || 0 },
                   { status: "Cancelled", count: statsDetails?.today_rides_status?.cancelled || 0 },
                   { status: "Total", count: statsDetails?.today_rides_status?.total || 0 },
                 ].map(({ status, count }, key) => {
