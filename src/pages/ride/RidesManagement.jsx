@@ -10,7 +10,7 @@ import { Button, Chip, Badge } from '@material-tailwind/react';
 let currentUser = JSON.parse(localStorage.getItem("userDataStore"));
 const apiUrl = import.meta.env.VITE_API_URL_BASE_API;
 
-const RidesManagement = () => {
+const RidesManagement = (props) => {
     const [tableData, setTableData] = useState([]);
     const [totalRecords, setTotalRecords] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
