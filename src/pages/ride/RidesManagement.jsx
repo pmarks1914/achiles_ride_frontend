@@ -280,13 +280,14 @@ const RidesManagement = (props) => {
     return (
         <div className="p-4">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-                <div className="flex space-x-2">
-                    {statusOptions.map(option => (
+                <div className=""> 
+                    {statusOptions.map((option, id) => (
                         <Button
                             key={option.value}
                             variant={statusFilter === option.value ? "filled" : "outlined"}
                             color={statusFilter === option.value ? "blue" : "gray"}
                             size="sm"
+                            className='m-1'
                             onClick={() => handleStatusFilterChange(option.value)}
                         >
                             {option.label}
@@ -537,7 +538,7 @@ const RidesManagement = (props) => {
                         </select>
                     </div>
 
-                    <div className="flex justify-end space-x-3 pt-4">
+                    <div className="justify-end space-x-3 pt-4">
                         <button 
                             type="button"
                             className="px-4 py-2 border border-gray-300 rounded text-gray-700 hover:bg-gray-50"
