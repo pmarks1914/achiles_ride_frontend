@@ -88,7 +88,7 @@ export function Home() {
       color: "grey",
       title: "Daily Payments",
       description: "Last 6 Days Payment Trends",
-      footer: "updated 1 min ago",
+      footer: "updated just now",
       chart: {
         type: "line",
         height: 300,
@@ -106,6 +106,32 @@ export function Home() {
           },
           xaxis: {
             categories: statsDetails?.last_six_days_payments?.map(item => item.date) || ["Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6"],
+          },
+        },
+      },
+    },
+    {
+      color: "grey",
+      title: "Weekly Payments",
+      description: "Last 6 Weeks Payment Trends",
+      footer: "updated just now",
+      chart: {
+        type: "line",
+        height: 300,
+        series: [
+          {
+            name: "Amount",
+            data: statsDetails?.last_six_weeks_payments?.map(item => item.total_amount) || [0, 0, 0, 0, 0, 0],
+          },
+        ],
+        options: {
+          chart: {
+            toolbar: {
+              show: false,
+            },
+          },
+          xaxis: {
+            categories: statsDetails?.last_six_months_payments?.map(item => `${item.month} ${item.year}`) || ["Month 1", "Month 2", "Month 3", "Month 4", "Month 5", "Month 6"],
           },
         },
       },
@@ -199,7 +225,7 @@ export function Home() {
           />
         ))}
       </div>
-      <div className="mb-6 grid grid-cols-1 gap-y-12 gap-x-6 md:grid-cols-2 xl:grid-cols-2">
+      <div className="mb-6 grid grid-cols-1 gap-y-12 gap-x-6 md:grid-cols-2 xl:grid-cols-3">
         {statisticsChartsData.map((props) => (
           <StatisticsChart
             key={props.title}
@@ -209,7 +235,7 @@ export function Home() {
                 variant="small"
                 className="flex items-center font-normal text-blue-gray-600"
               >
-                <ClockIcon strokeWidth={2} className="h-4 w-4 text-blue-gray-400" />
+                <ClockIcon strokeWidth={2} className="h-4 w-4 m-0 text-blue-gray-400" />
                 &nbsp;{props.footer}
               </Typography>
             }
