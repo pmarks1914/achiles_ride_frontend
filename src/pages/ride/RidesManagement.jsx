@@ -83,7 +83,7 @@ const RidesManagement = (props) => {
         e.preventDefault();
         try {
             const response = await axios.patch(
-                `${apiUrl}/api/rides/${selectedRide?.ride_id}`,
+                `${apiUrl}/api/ride/${selectedRide?.ride_id}`,
                 {
                     status: editRideData.status
                 },
