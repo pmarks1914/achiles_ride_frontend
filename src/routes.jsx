@@ -79,7 +79,7 @@ export const routes = [
         icon: <CircleStackIcon {...icon} />,
         name: "all ride ",
         path: "/all-ride",
-        element: <RideToday typeData={"all-today"} />,
+        element: <RideToday typeData={"all-ride"} />,
       }]
   },
   {

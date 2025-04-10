@@ -12,7 +12,13 @@ const RideToday = (props) => {
             </div>
  
             <Card className="mx-0 -mt-36 mb-6 lg:mx-4 border border-blue-gray-100">
-                <RidesManagement typeData={props?.typeData} />
+                {
+                     props?.typeData === 'ride-today' ?
+                     <RidesManagement typeData={props?.typeData} />
+                     :
+                     <RidesManagement typeData={props?.typeData} />
+                }
+                
             </Card>
         </div>
     );
