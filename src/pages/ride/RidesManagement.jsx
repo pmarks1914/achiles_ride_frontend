@@ -34,7 +34,7 @@ const RidesManagement = () => {
     const fetchRides = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`${apiUrl}/api/rides/`, {
+            const response = await axios.get(`${apiUrl}/api/ride/all/`, {
                 params: {
                     page: currentPage,
                     page_size: pageSize,
