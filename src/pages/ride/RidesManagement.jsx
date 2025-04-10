@@ -12,7 +12,6 @@ const apiUrl = import.meta.env.VITE_API_URL_BASE_API;
 
 const RidesManagement = (props) => {
 
-    console.log(props?.typeData)
     const [tableData, setTableData] = useState([]);
     const [totalRecords, setTotalRecords] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
@@ -31,7 +30,7 @@ const RidesManagement = (props) => {
 
     useEffect(() => {
         fetchRides();
-    }, [currentPage, pageSize, searchText, statusFilter]);
+    }, [currentPage, pageSize, searchText, statusFilter, props?.typeData]);
 
     const fetchRides = async () => {
         setLoading(true);
@@ -43,7 +42,8 @@ const RidesManagement = (props) => {
                     start_date: dateRange[0] ? moment(dateRange[0]).format('YYYY-MM-DD') : null,
                     end_date: dateRange[1] ? moment(dateRange[1]).format('YYYY-MM-DD') : null,
                     search: searchText,
-                    status: statusFilter
+                    status: statusFilter,
+                    today: props?.typeData === "ride-today" ? true : false
                 },
                 headers: {
                     'Content-Type': 'application/json',
