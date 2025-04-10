@@ -198,7 +198,7 @@ const RidesManagement = () => {
         },
         { 
             name: 'Fare', 
-            selector: row => `$${row?.fare?.toFixed(2) || '0.00'}`, 
+            selector: row => `${row?.fare?.toFixed(2) || '0.00'}`, 
             width: '10%' 
         },
         { 
@@ -372,7 +372,7 @@ const RidesManagement = () => {
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div>
                                 <p className="text-sm text-gray-500">Fare</p>
-                                <p className="text-gray-800">${selectedRide?.fare?.toFixed(2) || '0.00'}</p>
+                                <p className="text-gray-800">{selectedRide?.fare?.toFixed(2) || '0.00'}</p>
                             </div>
                             <div>
                                 <p className="text-sm text-gray-500">Distance</p>
@@ -412,7 +412,7 @@ const RidesManagement = () => {
                                         <div>
                                             <p className="text-sm text-gray-500">Amount</p>
                                             <p className="text-gray-800">
-                                                ${selectedRide.payments[0].amount?.toFixed(2) || '0.00'}
+                                                {selectedRide.payments[0].amount?.toFixed(2) || '0.00'}
                                             </p>
                                         </div>
                                         <div>
