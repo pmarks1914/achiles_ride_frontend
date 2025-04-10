@@ -131,7 +131,7 @@ export function Home() {
             },
           },
           xaxis: {
-            categories: statsDetails?.last_six_months_payments?.map(item => `${item.month} ${item.year}`) || ["Month 1", "Month 2", "Month 3", "Month 4", "Month 5", "Month 6"],
+            categories: statsDetails?.last_six_weeks_payments?.map(item => `${item.week_start	} ${item.week_end	}`) || ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5", "Week 6"],
           },
         },
       },
