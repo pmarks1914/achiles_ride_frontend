@@ -130,7 +130,7 @@ export function Home() {
               show: false,
             },
           },
-          xaxis: {
+          xaxis: { 
             categories: statsDetails?.last_six_weeks_payments?.map(item => `${item.week_start	} ${item.week_end	}`) || ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5", "Week 6"],
           },
         },
@@ -262,6 +262,11 @@ export function Home() {
                 <CheckCircleIcon strokeWidth={3} className="h-4 w-4 text-blue-gray-200" />
                 <strong>{statsDetails?.today_rides_status?.completed || 0} completed</strong> today
               </Typography>
+              <EllipsisVerticalIcon
+                    strokeWidth={3}
+                    fill="currenColor"
+                    className="h-6 w-6"
+                  />
             </div>
             <Menu placement="left-start">
               <MenuHandler>
