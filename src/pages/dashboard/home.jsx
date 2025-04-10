@@ -262,11 +262,7 @@ export function Home() {
                 <CheckCircleIcon strokeWidth={3} className="h-4 w-4 text-blue-gray-200" />
                 <strong>{statsDetails?.today_rides_status?.completed || 0} completed</strong> today
               </Typography>
-              <EllipsisVerticalIcon
-                    strokeWidth={3}
-                    fill="currenColor"
-                    className="h-6 w-6"
-                  />
+              
             </div>
             <Menu placement="left-start">
               <MenuHandler>
@@ -279,8 +275,8 @@ export function Home() {
                 </IconButton>
               </MenuHandler>
               <MenuList>
-                <MenuItem>Refresh</MenuItem>
-                <MenuItem>Export</MenuItem>
+                <MenuItem onClick={()=>generateReport()}>Refresh</MenuItem>
+                {/* <MenuItem>Export</MenuItem> */}
               </MenuList>
             </Menu>
           </CardHeader>
