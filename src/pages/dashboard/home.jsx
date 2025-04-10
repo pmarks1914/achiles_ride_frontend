@@ -370,22 +370,6 @@ export function Home() {
           >
             <Typography variant="h6" color="blue-gray" className="mb-2">
               Payment Status
-
-            <Menu placement="left-start float-right">
-              <MenuHandler>
-                <IconButton size="sm" variant="text" color="blue-gray">
-                  <EllipsisVerticalIcon
-                    strokeWidth={3}
-                    fill="currenColor"
-                    className="h-6 w-6"
-                  />
-                </IconButton>
-              </MenuHandler>
-              <MenuList>
-                <MenuItem onClick={()=>generateReport()}>Refresh</MenuItem>
-                {/* <MenuItem>Export</MenuItem> */}
-              </MenuList>
-            </Menu>
             </Typography>
             <Typography
               variant="small"
