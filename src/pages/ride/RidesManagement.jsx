@@ -332,7 +332,7 @@ const RidesManagement = (props) => {
 
             {/* View Ride Modal */}
             <aside
-                className={`fixed top-0 right-0 z-50 h-screen w-1/2 bg-white px-6 shadow-lg transition-transform duration-300 ${
+                className={`fixed top-0 right-0 z-50 h-screen w-2/2 bg-white px-6 shadow-lg transition-transform duration-300 ${
                     viewModal ? "translate-x-0" : "translate-x-full"
                 }`}
             >
@@ -500,7 +500,7 @@ const RidesManagement = (props) => {
 
             {/* Edit Ride Modal */}
             <aside
-                className={`fixed top-0 right-0 z-50 h-screen w-1/3 bg-white px-6 shadow-lg transition-transform duration-300 ${
+                className={`fixed top-0 right-0 z-50 h-screen w-96 bg-white px-6 shadow-lg transition-transform duration-300 ${
                     editModal ? "translate-x-0" : "translate-x-full"
                 }`}
             >
