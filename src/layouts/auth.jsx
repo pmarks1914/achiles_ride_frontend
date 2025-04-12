@@ -33,7 +33,7 @@ export function Auth() {
   ];
 
   window.onstorage = () => {
-    // console.log("storage ")
+    console.log("storage ")
     let sessionData = JSON.parse(localStorage.getItem("userDataStore"));
     if(sessionData?.access_token){ }
     else{

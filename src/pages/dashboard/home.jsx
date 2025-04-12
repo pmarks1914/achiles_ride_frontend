@@ -29,7 +29,11 @@ import axios from "axios";
 const apiUrl = import.meta.env.VITE_API_URL_BASE_API;
 let currentUser = JSON.parse(localStorage.getItem("userDataStore"));
 
+console.log(currentUser, ".........")
+
 export function Home() {
+  if(currentUser?.access_token){}else{ window.location.href = '/auth/sign-in' }
+  
   const [statsDetails, setStatsDetails] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -178,7 +182,7 @@ export function Home() {
           'Authorization': `Bearer ${currentUser.access_token}`,
         }
       });
-      setStatsDetails(response.data);
+      setStatsDetails(response?.data);
     } catch (err) {
       setError(err.message);
       console.error("Error fetching dashboard stats:", err);
@@ -274,7 +278,7 @@ export function Home() {
                   />
                 </IconButton>
               </MenuHandler>
-              <MenuList> 
+              <MenuList>  
                 <MenuItem onClick={()=>generateReport()}>Refresh</MenuItem>
                 {/* <MenuItem>Export</MenuItem> */}
               </MenuList>

@@ -3,13 +3,13 @@ import React, { createContext, useState, useEffect } from 'react';
 export const AuthContext = createContext();
 
 window.onstorage = () => {
-    // console.log("storage ")
-    let userDataStore = JSON.parse(localStorage.getItem("userDataStore"));
-    if(userDataStore?.access_token){ }
-    else{
-      window.location.href="/auth/sign-in";
-    }
-  };
+  console.log("storage ")
+  let userDataStore = JSON.parse(localStorage.getItem("userDataStore"));
+  if (userDataStore?.access_token) { }
+  else {
+    window.location.href = "/auth/sign-in";
+  }
+};
 
 
 export const AuthProvider = ({ children }) => {
@@ -18,10 +18,10 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     let userDataStore = JSON.parse(localStorage.getItem("userDataStore"));
 
-    // console.log("token ", userDataStore?.access_token)
+    console.log("token ", userDataStore?.access_token)
     if (userDataStore?.access_token) {
       // Validate the userDataStore?.access_token (e.g., check expiration)
-      setUser({ token: userDataStore?.access_token});
+      setUser({ token: userDataStore?.access_token });
     }
   }, []);
 
@@ -39,8 +39,8 @@ export const AuthProvider = ({ children }) => {
     console.log("logout  ")
   };
 
-  
- 
+
+
   return (
     <AuthContext.Provider value={{ user, login, logout }}>
       {children}
