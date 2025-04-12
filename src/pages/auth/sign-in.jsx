@@ -14,8 +14,7 @@ const apiUrl = import.meta.env.VITE_API_URL_BASE_API;
 
 export function SignIn() {
 
-
-  console.log("process ", apiUrl)
+  // console.log("process ", apiUrl)
   // call api
   const [getFormDataError, setGetFormDataError] = useState({
     "password": false,
@@ -81,7 +80,7 @@ export function SignIn() {
           let permission_list = ['MERCHANT_ADMIN', 'SUPER_ADMIN']
           let counter = 600000; // 600000 = 10m
           let userData = response?.data;
-          userData = {...userData, ...response?.data, ...{ counter: counter}, ...{permission_list: permission_list}, "timeLogout": new Date(new Date().getTime() + counter)}
+          userData = {...userData, ...response?.data, ...{ counter: counter}, ...{permission_list: permission_list}, ...{"timeLogout": new Date(new Date().getTime() + counter)}}
 
           // console.log(userData); timeLogout
           localStorage.setItem("userDataStore", JSON.stringify(userData));

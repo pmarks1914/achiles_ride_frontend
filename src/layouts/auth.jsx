@@ -32,6 +32,15 @@ export function Auth() {
     },
   ];
 
+  window.onstorage = () => {
+    // console.log("storage ")
+    let sessionData = JSON.parse(localStorage.getItem("userDataStore"));
+    if(sessionData?.access_token){ }
+    else{
+      window.location.href="/auth/sign-in";
+    }
+  };
+
   return (
     <div className="relative min-h-screen w-full">
       <Routes>
