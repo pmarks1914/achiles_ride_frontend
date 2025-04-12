@@ -6,7 +6,7 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const apiUrl = import.meta.env.VITE_API_URL_BASE_API;
@@ -26,6 +26,20 @@ export function SignIn() {
   const [loader, setLoader] = useState("<div></div")
   const [login, setLogin] = useState("Login")
   const [loginError, setLoginError] = useState("")
+
+
+  useEffect(() => {
+    // Clear history when component mounts
+    clearTabHistory();    
+  }, []);
+
+  function clearTabHistory() {
+    const currentUrl = window.location.href;
+    window.history.pushState(null, "", currentUrl);
+    window.onpopstate = function (event) {
+      window.history.go(1);
+    };
+  }
 
   function CheckLogin(e){
     e.preventDefault();    

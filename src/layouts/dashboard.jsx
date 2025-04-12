@@ -9,10 +9,15 @@ import {
 } from "@/widgets/layout";
 import routes from "@/routes";
 import { useMaterialTailwindController, setOpenConfigurator } from "@/context";
+import { getSessionTimeout } from "@/Utils/Utils";
 
 export function Dashboard() {
+  getSessionTimeout();
+
+
   const [controller, dispatch] = useMaterialTailwindController();
   const { sidenavType } = controller;
+
 
   return (
     <div className="min-h-screen bg-blue-gray-50/50">
