@@ -3,7 +3,7 @@ import Swal from 'sweetalert2';
 
 
 
-const userData = JSON.parse(localStorage.getItem("sessionData"));
+const userData = JSON.parse(localStorage.getItem("userDataStore"));
 // let counter = 1000;
 
 export function getSessionTimeout() {
@@ -14,7 +14,7 @@ export function getSessionTimeout() {
     if (userData) {
 
       let x = setInterval(function () {
-        const currentUser_new = JSON.parse(localStorage.getItem("sessionData"));
+        const currentUser_new = JSON.parse(localStorage.getItem("userDataStore"));
         let now = new Date().getTime();
         let distance = new Date(currentUser_new?.timeLogout).getTime() - now;
         let seconds = Math.floor((distance % (1000 * 60)) / 1000);
@@ -37,7 +37,6 @@ export function getSessionTimeout() {
               confirmButtonText: 'Extend Session',
               confirmButtonColor: '#24B8EE',
               didOpen: (openTracker) => {
-                // console.log('Session openTracker', openTracker);
                 // Update the timer every second
                 timerInterval = setInterval(() => {
                   const htmlContainer = Swal.getHtmlContainer();
@@ -45,7 +44,6 @@ export function getSessionTimeout() {
                       const remainingSeconds = Math.ceil(Swal.getTimerLeft() / 1000);
                       remainingSeconds > 0 ? htmlContainer.innerHTML = `Session Expiring Soon! Signing you out in <b>${remainingSeconds}</b> seconds.` : '';                      
                   }
-
                 }, 1000);
               },
               willClose: () => {
@@ -53,19 +51,11 @@ export function getSessionTimeout() {
               },
             }).then((result) => {
               // console.log('Session expired. Redirecting to login...', result);
-              // Handle auto-close (e.g., redirect to login page)
-              // localStorage.clear()
               if (result.isConfirmed || result.dismiss === Swal.DismissReason.backdrop) {
-                // 
-                // clearInterval(x);
-                // console.log('Session restarted');
-
                 currentUser_new["timeLogout"] = new Date().getTime() + currentUser_new?.sessiomTime;
-                localStorage.setItem('sessionData', JSON.stringify(currentUser_new))
+                localStorage.setItem('userDataStore', JSON.stringify(currentUser_new))
                 
                 first_distance_passed = 0;
-
-
               }
               else {
                 // localStorage.clear()
