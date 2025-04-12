@@ -274,7 +274,7 @@ export function Home() {
                   />
                 </IconButton>
               </MenuHandler>
-              <MenuList>
+              <MenuList> 
                 <MenuItem onClick={()=>generateReport()}>Refresh</MenuItem>
                 {/* <MenuItem>Export</MenuItem> */}
               </MenuList>

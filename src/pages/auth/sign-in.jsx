@@ -67,8 +67,9 @@ export function SignIn() {
           let permission_list = ['MERCHANT_ADMIN', 'SUPER_ADMIN']
           let counter = 600000; // 600000 = 10m
           let userData = response?.data;
-          userData = {...userData, ...response?.data, ...{ counter: counter}, ...{permission_list: permission_list}}
-          // console.log(userData);
+          userData = {...userData, ...response?.data, ...{ counter: counter}, ...{permission_list: permission_list}, "timeLogout": new Date(new Date().getTime() + counter)}
+
+          // console.log(userData); timeLogout
           localStorage.setItem("userDataStore", JSON.stringify(userData));
 
         if(response?.data?.user?.must_change_password){
