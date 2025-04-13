@@ -25,7 +25,7 @@ function App() {
 
         {/* Protected routes  */}
         {
-          currentUser?.access ?
+          currentUser?.access_token ?
             [
               <Route path="/dashboard/*" element={<Dashboard />} key={1} />
             ]
