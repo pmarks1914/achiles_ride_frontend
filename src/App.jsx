@@ -31,7 +31,7 @@ function App() {
             ]
             : ""
         }
-        
+        <Route path="*" element={<Navigate to="/auth/sign-in" replace />} />
       </Routes>
     </Suspense>
   );
