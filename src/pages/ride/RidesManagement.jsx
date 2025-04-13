@@ -331,11 +331,11 @@ const RidesManagement = (props) => {
             />
 
             {/* View Ride Modal */}
-            <aside
-                className={`fixed top-0 right-0 z-50 h-screen w-2/2 bg-white px-6 shadow-lg transition-transform duration-300 ${
-                    viewModal ? "translate-x-0" : "translate-x-full"
-                }`}
-            >
+<aside
+    className={`fixed top-0 right-0 z-50 h-screen w-2/2 bg-white px-6 shadow-lg transition-transform duration-300 overflow-y-auto ${
+        viewModal ? "translate-x-0" : "translate-x-full"
+    }`}
+>
                 <div className="flex items-start justify-between pt-8 pb-6">
                     <div>
                         <h5 className="text-xl font-semibold text-gray-800">Ride Details</h5>
@@ -369,7 +369,7 @@ const RidesManagement = (props) => {
                                 <p className="text-gray-800"> {selectedRide?.riders?.vehicle_registration}</p>
                             </div>
                             <div>
-                                <h6 className="font-semibold mb-2">Rider</h6>
+                                <h6 className="font-semibold mb-2">Customer</h6>
 
                                 <p className="text-sm text-gray-500">Name </p>
                                 <p className="text-gray-800">{selectedRide?.customer?.name}</p>
@@ -380,6 +380,8 @@ const RidesManagement = (props) => {
                                 <p className="text-sm text-gray-500">Phone Number </p>
                                 <p className="text-gray-800"> {selectedRide?.customer?.phone}</p>
                             </div>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <p className="text-sm text-gray-500">Status</p>
                                 <div className="mt-1">{getStatusBadge(selectedRide?.status)}</div>
@@ -521,6 +523,7 @@ const RidesManagement = (props) => {
                         Close
                     </button>
                 </div>
+                
             </aside>
 
             {/* Edit Ride Modal */}
