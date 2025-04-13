@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import moment from 'moment';
-import { XMarkIcon, CheckIcon, ClockIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 import DataTable from 'react-data-table-component';
 import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
-import { Button, Chip, Badge } from '@material-tailwind/react';
+import { Button, Chip } from '@material-tailwind/react';
+import { DateRangePicker } from 'react-date-range';
+import 'react-date-range/dist/styles.css';
+import 'react-date-range/dist/theme/default.css';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 let currentUser = JSON.parse(localStorage.getItem("userDataStore"));
 const apiUrl = import.meta.env.VITE_API_URL_BASE_API;
 
 const RidesManagement = (props) => {
-
     const [tableData, setTableData] = useState([]);
     const [totalRecords, setTotalRecords] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
@@ -19,7 +23,14 @@ const RidesManagement = (props) => {
     const [loading, setLoading] = useState(true);
     const [searchText, setSearchText] = useState('');
     const [statusFilter, setStatusFilter] = useState('');
-    const [dateRange, setDateRange] = useState({});
+    const [showDatePicker, setShowDatePicker] = useState(false);
+    const [dateRange, setDateRange] = useState([
+        {
+            startDate: null,
+            endDate: null,
+            key: 'selection'
+        }
+    ]);
 
     // Modals
     const [viewModal, setViewModal] = useState(false);
@@ -30,7 +41,7 @@ const RidesManagement = (props) => {
 
     useEffect(() => {
         fetchRides();
-    }, [currentPage, pageSize, searchText, statusFilter, props?.typeData]);
+    }, [currentPage, pageSize, searchText, statusFilter, props?.typeData, dateRange]);
 
     const fetchRides = async () => {
         setLoading(true);
@@ -39,8 +50,8 @@ const RidesManagement = (props) => {
                 params: {
                     page: currentPage,
                     page_size: pageSize,
-                    start_date: dateRange[0] ? moment(dateRange[0]).format('YYYY-MM-DD') : null,
-                    end_date: dateRange[1] ? moment(dateRange[1]).format('YYYY-MM-DD') : null,
+                    start_date: dateRange[0]?.startDate ? moment(dateRange[0].startDate).format('YYYY-MM-DD') : null,
+                    end_date: dateRange[0]?.endDate ? moment(dateRange[0].endDate).format('YYYY-MM-DD') : null,
                     search: searchText,
                     status: statusFilter,
                     today: props?.typeData === "ride-today" ? true : false
@@ -78,7 +89,7 @@ const RidesManagement = (props) => {
 
     const handleStatusFilterChange = (status) => {
         setStatusFilter(status);
-        setCurrentPage(1); // Reset to first page when filter changes
+        setCurrentPage(1);
     };
 
     const handleUpdateRideStatus = async (e) => {
@@ -134,6 +145,87 @@ const RidesManagement = (props) => {
         }
     };
 
+    const handleExportCSV = () => {
+        const headers = [
+            'Ride ID', 'Status', 'Fare', 'Payment Status', 'Rating', 
+            'Start Time', 'End Time', 'Pickup Location', 'Dropoff Location',
+            'Distance (km)', 'Duration', 'Rider Name', 'Rider Email', 
+            'Customer Name', 'Customer Email'
+        ];
+
+        const data = tableData.map(ride => [
+            ride.ride_id,
+            ride.status,
+            ride.fare?.toFixed(2) || '0.00',
+            ride.payments?.length > 0 ? ride.payments[0].status : 'No Payment',
+            ride.ratings?.length > 0 ? ride.ratings[0].rating : '-',
+            moment(ride.start_time).format('LLL'),
+            ride.end_time ? moment(ride.end_time).format('LLL') : 'N/A',
+            ride.pickup_location,
+            ride.dropoff_location,
+            ride.distance,
+            ride.start_time && ride.end_time ? 
+                moment.duration(moment(ride.end_time).diff(moment(ride.start_time))).humanize() : 'N/A',
+            ride.riders?.user?.name,
+            ride.riders?.user?.email,
+            ride.customer?.name,
+            ride.customer?.email
+        ]);
+
+        let csvContent = "data:text/csv;charset=utf-8," 
+            + headers.join(",") + "\n" 
+            + data.map(row => row.join(",")).join("\n");
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", `rides_${moment().format('YYYYMMDD_HHmmss')}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
+    const handleExportExcel = () => {
+        const data = tableData.map(ride => ({
+            'Ride ID': ride.ride_id,
+            'Status': ride.status,
+            'Fare': ride.fare?.toFixed(2) || '0.00',
+            'Payment Status': ride.payments?.length > 0 ? ride.payments[0].status : 'No Payment',
+            'Rating': ride.ratings?.length > 0 ? ride.ratings[0].rating : '-',
+            'Start Time': moment(ride.start_time).format('LLL'),
+            'End Time': ride.end_time ? moment(ride.end_time).format('LLL') : 'N/A',
+            'Pickup Location': ride.pickup_location,
+            'Dropoff Location': ride.dropoff_location,
+            'Distance (km)': ride.distance,
+            'Duration': ride.start_time && ride.end_time ? 
+                moment.duration(moment(ride.end_time).diff(moment(ride.start_time))).humanize() : 'N/A',
+            'Rider Name': ride.riders?.user?.name,
+            'Rider Email': ride.riders?.user?.email,
+            'Customer Name': ride.customer?.name,
+            'Customer Email': ride.customer?.email
+        }));
+
+        const worksheet = XLSX.utils.json_to_sheet(data);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Rides");
+        const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+        const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        saveAs(blob, `rides_${moment().format('YYYYMMDD_HHmmss')}.xlsx`);
+    };
+
+    const handleDateRangeChange = (item) => {
+        setDateRange([item.selection]);
+    };
+
+    const resetDateFilter = () => {
+        setDateRange([{
+            startDate: null,
+            endDate: null,
+            key: 'selection'
+        }]);
+        setShowDatePicker(false);
+    };
+
     const getStatusBadge = (status) => {
         switch (status) {
             case 'completed':
@@ -172,26 +264,6 @@ const RidesManagement = (props) => {
             name: 'Ride ID',
             selector: row => row?.ride_id?.substring(0, 8),
             width: '10%'
-        },
-        {
-            name: 'Pickup',
-            selector: row => row?.pickup_location,
-            width: '15%',
-            cell: row => (
-                <div className="truncate max-w-xs">
-                    {row?.pickup_location}
-                </div>
-            )
-        },
-        {
-            name: 'Dropoff',
-            selector: row => row?.dropoff_location,
-            width: '15%',
-            cell: row => (
-                <div className="truncate max-w-xs">
-                    {row?.dropoff_location}
-                </div>
-            )
         },
         {
             name: 'Status',
@@ -281,7 +353,7 @@ const RidesManagement = (props) => {
         <div className="p-4">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                 <div className="">
-                    {statusOptions.map((option, id) => (
+                    {statusOptions.map((option) => (
                         <Button
                             key={option.value}
                             variant={statusFilter === option.value ? "filled" : "outlined"}
@@ -294,14 +366,85 @@ const RidesManagement = (props) => {
                         </Button>
                     ))}
                 </div>
-                <div className="w-full md:w-64">
-                    <input
-                        type="text"
-                        className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="Search Rides..."
-                        value={searchText}
-                        onChange={handleSearch}
-                    />
+                <div className="flex items-center gap-2">
+                    <div className="relative">
+                        <Button
+                            variant="outlined"
+                            color="blue"
+                            size="sm"
+                            onClick={() => setShowDatePicker(!showDatePicker)}
+                        >
+                            {dateRange[0]?.startDate ? 
+                                `${moment(dateRange[0].startDate).format('MMM D, YYYY')} - ${dateRange[0]?.endDate ? moment(dateRange[0].endDate).format('MMM D, YYYY') : ''}` 
+                                : 'Select Date Range'}
+                        </Button>
+                        {dateRange[0]?.startDate && (
+                            <button 
+                                onClick={resetDateFilter}
+                                className="absolute -right-2 -top-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                            >
+                                ×
+                            </button>
+                        )}
+                        {showDatePicker && (
+                            <div className=" mt-1 bg-white shadow-lg rounded-md p-2 border border-gray-200">
+                                <DateRangePicker
+                                    onChange={handleDateRangeChange}
+                                    showSelectionPreview={true}
+                                    moveRangeOnFirstSelection={false}
+                                    months={2}
+                                    ranges={dateRange}
+                                    direction="horizontal"
+                                />
+                                <div className="flex justify-end space-x-2 mt-2">
+                                    <Button
+                                        variant="text"
+                                        size="sm"
+                                        onClick={() => setShowDatePicker(false)}
+                                    >
+                                        Cancel
+                                    </Button>
+                                    <Button
+                                        variant="filled"
+                                        size="sm"
+                                        color="blue"
+                                        onClick={() => setShowDatePicker(false)}
+                                    >
+                                        Apply
+                                    </Button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                    
+                    <div className="flex space-x-2">
+                        <Button
+                            variant="outlined"
+                            color="green"
+                            size="sm"
+                            onClick={handleExportCSV}
+                        >
+                            Export CSV
+                        </Button>
+                        <Button
+                            variant="outlined"
+                            color="green"
+                            size="sm"
+                            onClick={handleExportExcel}
+                        >
+                            Export Excel
+                        </Button>
+                    </div>
+                    
+                    <div className="w-full md:w-64">
+                        <input
+                            type="text"
+                            className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Search Rides..."
+                            value={searchText}
+                            onChange={handleSearch}
+                        />
+                    </div>
                 </div>
             </div>
 
@@ -522,7 +665,6 @@ const RidesManagement = (props) => {
                         Close
                     </button>
                 </div>
-
             </aside>
 
             {/* Edit Ride Modal */}
@@ -586,4 +728,3 @@ const RidesManagement = (props) => {
 };
 
 export default RidesManagement;
-
