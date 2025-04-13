@@ -20,11 +20,11 @@ const RidesManagement = (props) => {
     const [searchText, setSearchText] = useState('');
     const [statusFilter, setStatusFilter] = useState('');
     const [dateRange, setDateRange] = useState({});
-    
+
     // Modals
     const [viewModal, setViewModal] = useState(false);
     const [editModal, setEditModal] = useState(false);
-    
+
     const [selectedRide, setSelectedRide] = useState(null);
     const [editRideData, setEditRideData] = useState({});
 
@@ -49,7 +49,7 @@ const RidesManagement = (props) => {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${currentUser.access_token}`
                 },
-            });            
+            });
 
             if (response?.status === 200) {
                 const { current_page, total_items, page_size, total_pages, items } = response?.data;
@@ -108,8 +108,8 @@ const RidesManagement = (props) => {
                     timerProgressBar: true,
                     closeOnConfirm: false,
                     didOpen: (toast) => {
-                      toast.addEventListener('mouseenter', Swal.stopTimer)
-                      toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
                     }
                 });
                 setEditModal(false);
@@ -127,15 +127,15 @@ const RidesManagement = (props) => {
                 timerProgressBar: true,
                 closeOnConfirm: false,
                 didOpen: (toast) => {
-                  toast.addEventListener('mouseenter', Swal.stopTimer)
-                  toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
                 }
             });
         }
     };
 
     const getStatusBadge = (status) => {
-        switch(status) {
+        switch (status) {
             case 'completed':
                 return <Chip color="green" value="Completed" size="sm" />;
             case 'in_progress':
@@ -150,7 +150,7 @@ const RidesManagement = (props) => {
     };
 
     const getPaymentStatusBadge = (status) => {
-        switch(status) {
+        switch (status) {
             case 'completed':
                 return <Chip color="green" value="Paid" size="sm" />;
             case 'pending':
@@ -163,19 +163,19 @@ const RidesManagement = (props) => {
     };
 
     const columns = [
-        { 
-            name: 'No.', 
-            selector: (row, index) => index + 1, 
-            width: '5%' 
+        {
+            name: 'No.',
+            selector: (row, index) => index + 1,
+            width: '5%'
         },
-        { 
-            name: 'Ride ID', 
-            selector: row => row?.ride_id?.substring(0, 8), 
-            width: '10%' 
+        {
+            name: 'Ride ID',
+            selector: row => row?.ride_id?.substring(0, 8),
+            width: '10%'
         },
-        { 
-            name: 'Pickup', 
-            selector: row => row?.pickup_location, 
+        {
+            name: 'Pickup',
+            selector: row => row?.pickup_location,
             width: '15%',
             cell: row => (
                 <div className="truncate max-w-xs">
@@ -183,9 +183,9 @@ const RidesManagement = (props) => {
                 </div>
             )
         },
-        { 
-            name: 'Dropoff', 
-            selector: row => row?.dropoff_location, 
+        {
+            name: 'Dropoff',
+            selector: row => row?.dropoff_location,
             width: '15%',
             cell: row => (
                 <div className="truncate max-w-xs">
@@ -193,18 +193,18 @@ const RidesManagement = (props) => {
                 </div>
             )
         },
-        { 
-            name: 'Status', 
+        {
+            name: 'Status',
             cell: row => getStatusBadge(row?.status),
             width: '10%'
         },
-        { 
-            name: 'Fare', 
-            selector: row => `${row?.fare?.toFixed(2) || '0.00'}`, 
-            width: '10%' 
+        {
+            name: 'Fare',
+            selector: row => `${row?.fare?.toFixed(2) || '0.00'}`,
+            width: '10%'
         },
-        { 
-            name: 'Payment', 
+        {
+            name: 'Payment',
             cell: row => (
                 <div>
                     {row?.payments?.length > 0 ? (
@@ -216,8 +216,8 @@ const RidesManagement = (props) => {
             ),
             width: '10%'
         },
-        { 
-            name: 'Rating', 
+        {
+            name: 'Rating',
             cell: row => (
                 <div>
                     {row?.ratings?.length > 0 ? (
@@ -232,16 +232,16 @@ const RidesManagement = (props) => {
             ),
             width: '10%'
         },
-        { 
-            name: 'Start Time', 
-            selector: row => moment(row?.start_time).format('LLL'), 
-            width: '15%' 
-        }, 
-        { 
-            name: 'Actions', 
+        {
+            name: 'Start Time',
+            selector: row => moment(row?.start_time).format('LLL'),
+            width: '15%'
+        },
+        {
+            name: 'Actions',
             cell: row => (
                 <div className="flex space-x-1">
-                    <button 
+                    <button
                         className="px-2 py-1 bg-gray-500 text-white rounded hover:bg-gray-600 text-xs"
                         onClick={() => {
                             setSelectedRide(row);
@@ -250,7 +250,7 @@ const RidesManagement = (props) => {
                     >
                         View
                     </button>
-                    <button 
+                    <button
                         className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-xs"
                         onClick={() => {
                             setSelectedRide(row);
@@ -280,7 +280,7 @@ const RidesManagement = (props) => {
     return (
         <div className="p-4">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-                <div className=""> 
+                <div className="">
                     {statusOptions.map((option, id) => (
                         <Button
                             key={option.value}
@@ -331,11 +331,10 @@ const RidesManagement = (props) => {
             />
 
             {/* View Ride Modal */}
-<aside
-    className={`fixed top-0 right-0 z-50 h-screen w-2/2 bg-white px-6 shadow-lg transition-transform duration-300 overflow-y-auto ${
-        viewModal ? "translate-x-0" : "translate-x-full"
-    }`}
->
+            <aside
+                className={`fixed top-0 right-0 z-50 h-screen w-2/2 bg-white px-6 shadow-lg transition-transform duration-300 overflow-y-auto ${viewModal ? "translate-x-0" : "translate-x-full"
+                    }`}
+            >
                 <div className="flex items-start justify-between pt-8 pb-6">
                     <div>
                         <h5 className="text-xl font-semibold text-gray-800">Ride Details</h5>
@@ -347,7 +346,7 @@ const RidesManagement = (props) => {
                         <XMarkIcon className="h-5 w-5" />
                     </button>
                 </div>
-                
+
                 {selectedRide && (
                     <div className="space-y-6">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -411,8 +410,8 @@ const RidesManagement = (props) => {
                             <div>
                                 <p className="text-sm text-gray-500">Duration</p>
                                 <p className="text-gray-800">
-                                    {selectedRide?.start_time && selectedRide?.end_time ? 
-                                        moment.duration(moment(selectedRide.end_time).diff(moment(selectedRide.start_time))).humanize() : 
+                                    {selectedRide?.start_time && selectedRide?.end_time ?
+                                        moment.duration(moment(selectedRide.end_time).diff(moment(selectedRide.start_time))).humanize() :
                                         'N/A'}
                                 </p>
                             </div>
@@ -426,8 +425,8 @@ const RidesManagement = (props) => {
                             <div>
                                 <p className="text-sm text-gray-500">End Time</p>
                                 <p className="text-gray-800">
-                                    {selectedRide?.end_time ? 
-                                        moment(selectedRide.end_time).format('LLL') : 
+                                    {selectedRide?.end_time ?
+                                        moment(selectedRide.end_time).format('LLL') :
                                         'N/A'}
                                 </p>
                             </div>
@@ -481,8 +480,8 @@ const RidesManagement = (props) => {
                                         </span>
                                         <div className="flex">
                                             {[...Array(5)].map((_, i) => (
-                                                <span 
-                                                    key={i} 
+                                                <span
+                                                    key={i}
                                                     className={`text-xl ${i < selectedRide.ratings[0].rating ? 'text-yellow-500' : 'text-gray-300'}`}
                                                 >
                                                     ★
@@ -514,23 +513,22 @@ const RidesManagement = (props) => {
                         </div>
                     </div>
                 )}
-                
+
                 <div className="flex justify-end pt-6">
-                    <button 
+                    <button
                         className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
                         onClick={() => setViewModal(false)}
                     >
                         Close
                     </button>
                 </div>
-                
+
             </aside>
 
             {/* Edit Ride Modal */}
             <aside
-                className={`fixed top-0 right-0 z-50 h-screen w-96 bg-white px-6 shadow-lg transition-transform duration-300 ${
-                    editModal ? "translate-x-0" : "translate-x-full"
-                }`}
+                className={`fixed top-0 right-0 z-50 h-screen w-96 bg-white px-6 shadow-lg transition-transform duration-300 ${editModal ? "translate-x-0" : "translate-x-full"
+                    }`}
             >
                 <div className="flex items-start justify-between pt-8 pb-6">
                     <div>
@@ -543,19 +541,19 @@ const RidesManagement = (props) => {
                         <XMarkIcon className="h-5 w-5" />
                     </button>
                 </div>
-                
+
                 <form onSubmit={handleUpdateRideStatus} className="space-y-4">
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Current Status</label>
                         <p className="text-gray-800 font-medium">{selectedRide?.status}</p>
                     </div>
-                    
+
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">New Status</label>
                         <select
                             className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                             value={editRideData.status}
-                            onChange={(e) => setEditRideData({...editRideData, status: e.target.value})}
+                            onChange={(e) => setEditRideData({ ...editRideData, status: e.target.value })}
                             required
                         >
                             <option value="requested">Requested</option>
@@ -567,14 +565,14 @@ const RidesManagement = (props) => {
                     </div>
 
                     <div className="justify-end space-x-3 pt-4">
-                        <button 
+                        <button
                             type="button"
                             className="px-4 py-2 border border-gray-300 rounded text-gray-700 hover:bg-gray-50"
                             onClick={() => setEditModal(false)}
                         >
                             Cancel
                         </button>
-                        <button 
+                        <button
                             type="submit"
                             className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
                         >
