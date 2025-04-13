@@ -361,8 +361,12 @@ const RidesManagement = (props) => {
 
                                 <p className="text-sm text-gray-500">Phone </p>
                                 <p className="text-gray-800"> {selectedRide?.riders?.user?.phone}</p>
-                                <p className="text-gray-800">License: {selectedRide?.riders?.license_number}</p>
-                                <p className="text-gray-800">Registration No: {selectedRide?.riders?.vehicle_registration}</p>
+
+                                <p className="text-sm text-gray-500">License Number </p>
+                                <p className="text-gray-800"> {selectedRide?.riders?.license_number}</p>
+
+                                <p className="text-sm text-gray-500">Registration Number </p>
+                                <p className="text-gray-800"> {selectedRide?.riders?.vehicle_registration}</p>
                             </div>
                             <div>
                                 <p className="text-sm text-gray-500">Customer </p>
