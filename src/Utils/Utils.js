@@ -22,7 +22,7 @@ export function getSessionTimeout() {
         // console.log( " <> ", currentUser_new?.counter);
         // console.log(distance, " <> ", seconds);
 
-        if (distance < 9742) {
+        if (distance < 5742) {
 
           if (first_distance_passed === 0) {
             first_distance_passed = first_distance_passed + 1;
