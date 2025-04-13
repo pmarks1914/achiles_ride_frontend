@@ -356,7 +356,8 @@ const RidesManagement = (props) => {
                                 <p className="text-sm text-gray-500">Name </p>
                                 <p className="text-gray-800">{selectedRide?.riders?.user?.name}</p>
 
-                                <p className="text-gray-800">Email: {selectedRide?.riders?.user?.email}</p>
+                                <p className="text-sm text-gray-500">Email </p>
+                                <p className="text-gray-800"> {selectedRide?.riders?.user?.email}</p>
                                 <p className="text-gray-800">Phone: {selectedRide?.riders?.user?.phone}</p>
                                 <p className="text-gray-800">License: {selectedRide?.riders?.license_number}</p>
                                 <p className="text-gray-800">Registration No: {selectedRide?.riders?.vehicle_registration}</p>
