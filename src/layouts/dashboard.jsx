@@ -19,8 +19,18 @@ export function Dashboard() {
   const { sidenavType } = controller;
 
 
+  function trackActivity() {
+    // e.preventDefault();
+    // get Session Timeout
+    const currentUser_new = JSON.parse(localStorage.getItem("userDataStore"));
+    if (currentUser_new) {
+      currentUser_new["timeLogout"] = new Date().getTime() + currentUser_new?.sessiomTime;
+      localStorage.setItem('userDataStore', JSON.stringify(currentUser_new))
+    }
+  }
+
   return (
-    <div className="min-h-screen bg-blue-gray-50/50">
+    <div className="min-h-screen bg-blue-gray-50/50" onClick={()=>trackActivity()}>
       <Sidenav
         routes={routes}
         brandImg={

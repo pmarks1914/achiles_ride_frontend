@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     let userDataStore = JSON.parse(localStorage.getItem("userDataStore"));
 
-    console.log("token ", userDataStore?.access_token)
+    // console.log("token ", userDataStore?.access_token)
     if (userDataStore?.access_token) {
       // Validate the userDataStore?.access_token (e.g., check expiration)
       setUser({ token: userDataStore?.access_token });
