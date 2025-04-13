@@ -35,7 +35,7 @@ export function getSessionTimeout() {
               allowOutsideClick: true,
               showConfirmButton: true,
               confirmButtonText: 'Extend Session',
-              confirmButtonColor: '#24B8EE',
+              confirmButtonColor: 'red',
               didOpen: (openTracker) => {
                 // Update the timer every second
                 timerInterval = setInterval(() => {
