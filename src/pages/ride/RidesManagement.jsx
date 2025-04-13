@@ -377,8 +377,8 @@ const RidesManagement = (props) => {
                                 <p className="text-sm text-gray-500">Email </p>
                                 <p className="text-gray-800"> {selectedRide?.customer?.email}</p>
 
-                                <p className="text-sm text-gray-500">Name </p>
-                                <p className="text-gray-800">Phone: {selectedRide?.customer?.phone}</p>
+                                <p className="text-sm text-gray-500">Phone Number </p>
+                                <p className="text-gray-800"> {selectedRide?.customer?.phone}</p>
                             </div>
                             <div>
                                 <p className="text-sm text-gray-500">Status</p>
