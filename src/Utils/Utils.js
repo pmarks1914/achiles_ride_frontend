@@ -72,6 +72,7 @@ export function getSessionTimeout() {
           // localStorage.removeItem("userDataStore")
           localStorage.clear()
           setTimeout(function () {
+            if(window.location.href is like "/auth/dashboard/*")
             window.location.href = '/auth/sign-in';
             window.location.reload()
           }, 100);
