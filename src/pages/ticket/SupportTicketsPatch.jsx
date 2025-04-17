@@ -18,18 +18,18 @@ const SupportTicketsPatch = (props) => {
     const [pageSize, setPageSize] = useState(10);
     const [loading, setLoading] = useState(true);
     const [searchText, setSearchText] = useState('');
-    
+
     // Modals
     const [createModal, setCreateModal] = useState(false);
     const [viewModal, setViewModal] = useState(false);
     const [editModal, setEditModal] = useState(false);
-    
+
     // Form data
     const [newTicketData, setNewTicketData] = useState({
         issue_description: '',
         status: 'open'
     });
-    
+
     const [selectedTicket, setSelectedTicket] = useState(null);
     const [editTicketData, setEditTicketData] = useState({});
 
@@ -51,7 +51,7 @@ const SupportTicketsPatch = (props) => {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${currentUser.access_token}`
                 },
-            });            
+            });
 
             if (response?.status === 200) {
                 const { total_items, items } = response?.data;
@@ -81,7 +81,7 @@ const SupportTicketsPatch = (props) => {
     const handleCreateTicket = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(`${apiUrl}/api/support_tickets`, 
+            const response = await axios.post(`${apiUrl}/api/support_tickets`,
                 {
                     issue_description: newTicketData.issue_description,
                     status: newTicketData.status,
@@ -198,7 +198,7 @@ const SupportTicketsPatch = (props) => {
     const showErrorToast = (message, error = null) => {
         let errorMessage = message;
         if (error?.response?.data?.detail) {
-            errorMessage = Array.isArray(error.response.data.detail) 
+            errorMessage = Array.isArray(error.response.data.detail)
                 ? error.response.data.detail[0]?.msg || error.response.data.detail
                 : error.response.data.detail;
         }
@@ -226,47 +226,46 @@ const SupportTicketsPatch = (props) => {
     ];
 
     const columns = [
-        { 
-            name: 'Ticket ID', 
-            selector: row => row?.ticket_id?.substring(0, 8), 
-            width: '15%' 
+        {
+            name: 'Ticket ID',
+            selector: row => row?.ticket_id?.substring(0, 8),
+            width: '15%'
         },
-        { 
-            name: 'Description', 
-            selector: row => row?.issue_description?.length > 50 
-                ? `${row.issue_description.substring(0, 50)}...` 
+        {
+            name: 'Description',
+            selector: row => row?.issue_description?.length > 50
+                ? `${row.issue_description.substring(0, 50)}...`
                 : row.issue_description,
-            width: '30%' 
+            width: '30%'
         },
-        { 
-            name: 'Status', 
+        {
+            name: 'Status',
             cell: row => (
-                <span className={`px-2 py-1 rounded-full text-xs ${
-                    row?.status === 'open' ? "bg-blue-100 text-blue-800" :
-                    row?.status === 'in_progress' ? "bg-yellow-100 text-yellow-800" :
-                    row?.status === 'resolved' ? "bg-green-100 text-green-800" :
-                    "bg-gray-100 text-gray-800"
-                }`}>
+                <span className={`px-2 py-1 rounded-full text-xs ${row?.status === 'open' ? "bg-blue-100 text-blue-800" :
+                        row?.status === 'in_progress' ? "bg-yellow-100 text-yellow-800" :
+                            row?.status === 'resolved' ? "bg-green-100 text-green-800" :
+                                "bg-gray-100 text-gray-800"
+                    }`}>
                     {row?.status?.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
                 </span>
             ),
             width: '15%'
         },
-        { 
-            name: 'Created At', 
-            selector: row => moment(row?.created_at).format('LLL'), 
-            width: '15%' 
+        {
+            name: 'Created At',
+            selector: row => moment(row?.created_at).format('LLL'),
+            width: '15%'
         },
-        { 
-            name: 'Updated At', 
-            selector: row => moment(row?.updated_at).format('LLL'), 
-            width: '15%' 
+        {
+            name: 'Updated At',
+            selector: row => moment(row?.updated_at).format('LLL'),
+            width: '15%'
         },
-        { 
-            name: 'Actions', 
+        {
+            name: 'Actions',
             cell: row => (
                 <div className="flex flex-wrap">
-                    <button 
+                    <button
                         className="m-1 px-3 py-1 bg-gray-500 text-white rounded hover:bg-gray-600 text-sm"
                         onClick={() => {
                             setSelectedTicket(row);
@@ -275,7 +274,7 @@ const SupportTicketsPatch = (props) => {
                     >
                         View
                     </button>
-                    <button 
+                    <button
                         className="m-1 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm"
                         onClick={() => {
                             setSelectedTicket(row);
@@ -288,7 +287,7 @@ const SupportTicketsPatch = (props) => {
                     >
                         Edit
                     </button>
-                    
+
                 </div>
             ),
             width: '20%'
@@ -338,9 +337,8 @@ const SupportTicketsPatch = (props) => {
 
             {/* View Ticket Modal */}
             <aside
-                className={`fixed top-0 right-0 z-50 h-screen w-96 bg-white px-6 shadow-lg transition-transform duration-300 overflow-x-scroll ${
-                    viewModal ? "translate-x-0" : "translate-x-full"
-                }`}
+                className={`fixed top-0 right-0 z-50 h-screen w-96 bg-white px-6 shadow-lg transition-transform duration-300 overflow-x-scroll ${viewModal ? "translate-x-0" : "translate-x-full"
+                    }`}
             >
                 <div className="flex items-start justify-between pt-8 pb-6">
                     <div>
@@ -353,7 +351,7 @@ const SupportTicketsPatch = (props) => {
                         <XMarkIcon className="h-5 w-5" />
                     </button>
                 </div>
-                
+
                 {selectedTicket && (
                     <div className="space-y-4">
                         <div>
@@ -370,12 +368,11 @@ const SupportTicketsPatch = (props) => {
                         </div>
                         <div>
                             <p className="text-sm text-gray-500">Status</p>
-                            <span className={`px-2 py-1 rounded-full text-xs ${
-                                selectedTicket?.status === 'open' ? "bg-blue-100 text-blue-800" :
-                                selectedTicket?.status === 'in_progress' ? "bg-yellow-100 text-yellow-800" :
-                                selectedTicket?.status === 'resolved' ? "bg-green-100 text-green-800" :
-                                "bg-gray-100 text-gray-800"
-                            }`}>
+                            <span className={`px-2 py-1 rounded-full text-xs ${selectedTicket?.status === 'open' ? "bg-blue-100 text-blue-800" :
+                                    selectedTicket?.status === 'in_progress' ? "bg-yellow-100 text-yellow-800" :
+                                        selectedTicket?.status === 'resolved' ? "bg-green-100 text-green-800" :
+                                            "bg-gray-100 text-gray-800"
+                                }`}>
                                 {selectedTicket?.status?.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
                             </span>
                         </div>
@@ -389,9 +386,9 @@ const SupportTicketsPatch = (props) => {
                         </div>
                     </div>
                 )}
-                
+
                 <div className="flex justify-end pt-6">
-                    <button 
+                    <button
                         className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
                         onClick={() => setViewModal(false)}
                     >
@@ -402,9 +399,8 @@ const SupportTicketsPatch = (props) => {
 
             {/* Edit Ticket Modal */}
             <aside
-                className={`fixed top-0 right-0 z-50 h-screen w-96 bg-white px-6 shadow-lg transition-transform duration-300 overflow-x-scroll ${
-                    editModal ? "translate-x-0" : "translate-x-full"
-                }`}
+                className={`fixed top-0 right-0 z-50 h-screen w-96 bg-white px-6 shadow-lg transition-transform duration-300 overflow-x-scroll ${editModal ? "translate-x-0" : "translate-x-full"
+                    }`}
             >
                 <div className="flex items-start justify-between pt-8 pb-6">
                     <div>
@@ -417,14 +413,14 @@ const SupportTicketsPatch = (props) => {
                         <XMarkIcon className="h-5 w-5" />
                     </button>
                 </div>
-                
+
                 <form onSubmit={handleUpdateTicket} className="space-y-4">
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Issue Description</label>
                         <textarea
                             className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                             value={editTicketData.issue_description}
-                            onChange={(e) => setEditTicketData({...editTicketData, issue_description: e.target.value})}
+                            onChange={(e) => setEditTicketData({ ...editTicketData, issue_description: e.target.value })}
                             required
                             rows={5}
                         />
@@ -434,7 +430,7 @@ const SupportTicketsPatch = (props) => {
                         <select
                             className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                             value={editTicketData.status}
-                            onChange={(e) => setEditTicketData({...editTicketData, status: e.target.value})}
+                            onChange={(e) => setEditTicketData({ ...editTicketData, status: e.target.value })}
                             required
                         >
                             {statusOptions.map(option => (
@@ -445,14 +441,14 @@ const SupportTicketsPatch = (props) => {
                         </select>
                     </div>
                     <div className="flex justify-end space-x-3 pt-4">
-                        <button 
+                        <button
                             type="button"
                             className="px-4 py-2 border border-gray-300 rounded text-gray-700 hover:bg-gray-50"
                             onClick={() => setEditModal(false)}
                         >
                             Cancel
                         </button>
-                        <button 
+                        <button
                             type="submit"
                             className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
                         >
@@ -460,6 +456,15 @@ const SupportTicketsPatch = (props) => {
                         </button>
                     </div>
                 </form>
+                <div className='mt-5 space-x-3 '>
+                    <label className="block text-sm font-medium text-gray-700 mb-1 mt-4"> {selectedTicket?.info ? "Ticket Info" : ""} </label>
+                    {selectedTicket?.info?.map(option => (
+                        <p className="text-gray-800 whitespace-pre-wrap mt-2">
+                            <span>{option.date} {"-"} {option.status}</span>
+                            <p> {option.issue_description} </p>
+                        </p>
+                    ))}
+                </div>
             </aside>
         </div>
     );
