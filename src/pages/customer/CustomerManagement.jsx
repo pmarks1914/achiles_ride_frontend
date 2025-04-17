@@ -594,7 +594,7 @@ const CustomerManagement = () => {
 
             {/* Create Customer Modal */}
             <aside
-                className={`fixed top-0 right-0 z-50 h-screen w-96 bg-white px-6 shadow-lg transition-transform duration-300 ${
+                className={`fixed top-0 right-0 z-50 h-screen w-96 bg-white px-6 shadow-lg transition-transform duration-300 overflow-x-scroll ${
                     createModal ? "translate-x-0" : "translate-x-full"
                 }`}
             >
@@ -671,7 +671,7 @@ const CustomerManagement = () => {
 
             {/* View Customer Modal */}
             <aside
-                className={`fixed top-0 right-0 z-50 h-screen w-96 bg-white px-6 shadow-lg transition-transform duration-300 ${
+                className={`fixed top-0 right-0 z-50 h-screen w-96 bg-white px-6 shadow-lg transition-transform duration-300 overflow-x-scroll ${
                     viewModal ? "translate-x-0" : "translate-x-full"
                 }`}
             >
@@ -728,7 +728,7 @@ const CustomerManagement = () => {
 
             {/* Edit Customer Modal */}
             <aside
-                className={`fixed top-0 right-0 z-50 h-screen w-96 bg-white px-6 shadow-lg transition-transform duration-300 ${
+                className={`fixed top-0 right-0 z-50 h-screen w-96 bg-white px-6 shadow-lg transition-transform duration-300 overflow-x-scroll ${
                     editModal ? "translate-x-0" : "translate-x-full"
                 }`}
             >

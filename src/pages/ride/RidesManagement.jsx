@@ -669,7 +669,7 @@ const RidesManagement = (props) => {
 
             {/* Edit Ride Modal */}
             <aside
-                className={`fixed top-0 right-0 z-50 h-screen w-96 bg-white px-6 shadow-lg transition-transform duration-300 ${editModal ? "translate-x-0" : "translate-x-full"
+                className={`fixed top-0 right-0 z-50 h-screen w-96 bg-white px-6 shadow-lg transition-transform duration-300 overflow-x-scroll ${editModal ? "translate-x-0" : "translate-x-full"
                     }`}
             >
                 <div className="flex items-start justify-between pt-8 pb-6">

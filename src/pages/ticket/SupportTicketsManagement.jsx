@@ -347,7 +347,7 @@ const SupportTicketsManagement = () => {
 
             {/* Create Ticket Modal */}
             <aside
-                className={`fixed top-0 right-0 z-50 h-screen w-96 bg-white px-6 shadow-lg transition-transform duration-300 ${createModal ? "translate-x-0" : "translate-x-full"
+                className={`fixed top-0 right-0 z-50 h-screen w-96 bg-white px-6 shadow-lg transition-transform duration-300 overflow-x-scroll ${createModal ? "translate-x-0" : "translate-x-full"
                     }`}
             >
                 <div className="flex items-start justify-between pt-8 pb-6">
@@ -408,7 +408,7 @@ const SupportTicketsManagement = () => {
 
             {/* View Ticket Modal */}
             <aside
-                className={`fixed top-0 right-0 z-50 h-screen w-96 bg-white px-6 shadow-lg transition-transform duration-300 ${viewModal ? "translate-x-0" : "translate-x-full"
+                className={`fixed top-0 right-0 z-50 h-screen w-96 bg-white px-6 shadow-lg transition-transform duration-300 overflow-x-scroll ${viewModal ? "translate-x-0" : "translate-x-full"
                     }`}
             >
                 <div className="flex items-start justify-between pt-8 pb-6">
@@ -475,7 +475,7 @@ const SupportTicketsManagement = () => {
 
             {/* Edit Ticket Modal */}
             <aside
-                className={`fixed top-0 right-0 z-50 h-screen w-96 bg-white px-6 shadow-lg transition-transform duration-300 ${editModal ? "translate-x-0" : "translate-x-full"
+                className={`fixed top-0 right-0 z-50 h-screen w-96 bg-white px-6 shadow-lg transition-transform duration-300 overflow-x-scroll ${editModal ? "translate-x-0" : "translate-x-full"
                     }`}
             >
                 <div className="flex items-start justify-between pt-8 pb-6">
@@ -516,7 +516,7 @@ const SupportTicketsManagement = () => {
                             ))}
                         </select>
                     </div>
-                    <div className="flex justify-end space-x-3 pt-4">
+                    <div className="flex justify-end space-x-3 pt-4 mb-3">
                         <button
                             type="button"
                             className="px-4 py-2 border border-gray-300 rounded text-gray-700 hover:bg-gray-50"
@@ -531,16 +531,18 @@ const SupportTicketsManagement = () => {
                             Update Ticket
                         </button>
                     </div>
+                </form>
 
 
-
-                    {editTicketData?.info?.map(option => (
+                <div className='mt-5 space-x-3 '>
+                <label className="block text-sm font-medium text-gray-700 mb-1 mt-4">Ticket Info</label>
+                    {selectedTicket?.info?.map(option => (
                         <p className="text-gray-800 whitespace-pre-wrap mt-2">
                             <span>{option.date} {"-"} {option.status}</span>
                             <p> {option.issue_description} </p>
                         </p>
                     ))}
-                </form>
+                </div>
             </aside>
         </div>
     );
