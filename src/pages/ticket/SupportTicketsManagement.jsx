@@ -436,10 +436,11 @@ const SupportTicketsManagement = () => {
                         <div>
                             <p className="text-sm text-gray-500">Issue Description</p>
                             {selectedTicket?.info?.map(option => (
-                                <p className="text-gray-800 whitespace-pre-wrap">
-                                    {option.issue_description}
-                                </p>
-                            ))}
+                            <p className="text-gray-800 whitespace-pre-wrap mt-2">
+                                <span>{option.date} {"-"} {option.status}</span>
+                                <p> {option.issue_description} </p>
+                            </p>
+                        ))}
                         </div>
                         <div>
                             <p className="text-sm text-gray-500">Status</p>
@@ -500,8 +501,9 @@ const SupportTicketsManagement = () => {
                             rows={5}
                         />
 
-                        {selectedTicket?.info?.map(option => (
+                        {editTicketData?.info?.map(option => (
                             <p className="text-gray-800 whitespace-pre-wrap">
+                                {option.date} {"-"} {option.status}
                                 {option.issue_description}
                             </p>
                         ))}
