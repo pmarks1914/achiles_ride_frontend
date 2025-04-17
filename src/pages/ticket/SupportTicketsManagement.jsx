@@ -436,6 +436,17 @@ const SupportTicketsManagement = () => {
                         <div>
                             <p className="text-sm text-gray-500">Issue Description</p>
                             <p className="text-gray-800 whitespace-pre-wrap">{selectedTicket?.issue_description}</p>
+                            
+                            {/* {
+                                selectedTicket?.info?.map((post, id)=>{
+                                    <p className="text-gray-800 whitespace-pre-wrap" key={id+1}>{id}</p>
+                                })
+                            } */}
+                            {selectedTicket?.info?.map(option => (
+                                <p key={option.issue_description} value={option.issue_description}>
+                                    {option.issue_description}
+                                </p>
+                            ))}
                         </div>
                         <div>
                             <p className="text-sm text-gray-500">Status</p>
