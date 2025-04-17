@@ -35,6 +35,9 @@ const SupportTicketsManagement = () => {
     useEffect(() => {
         fetchTickets();
     }, [currentPage, pageSize, searchText]);
+    useEffect(()=>{
+        !viewModal ? setSelectedTicket({}) : ""
+    }, [viewModal])
 
     const fetchTickets = async () => {
         setLoading(true);
@@ -434,16 +437,9 @@ const SupportTicketsManagement = () => {
                             <p className="text-gray-800">{selectedTicket?.user_id}</p>
                         </div>
                         <div>
-                            <p className="text-sm text-gray-500">Issue Description</p>
-                            <p className="text-gray-800 whitespace-pre-wrap">{selectedTicket?.issue_description}</p>
-                            
-                            {/* {
-                                selectedTicket?.info?.map((post, id)=>{
-                                    <p className="text-gray-800 whitespace-pre-wrap" key={id+1}>{id}</p>
-                                })
-                            } */}
+                            <p className="text-sm text-gray-500">Issue Description</p>                            
                             {selectedTicket?.info?.map(option => (
-                                <p key={option.issue_description} value={option.issue_description}>
+                                <p className="text-gray-800 whitespace-pre-wrap">
                                     {option.issue_description}
                                 </p>
                             ))}
