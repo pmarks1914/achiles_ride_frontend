@@ -395,6 +395,16 @@ const SupportTicketsPatch = (props) => {
                         Close
                     </button>
                 </div>
+
+                <div className='mt-5 space-x-3 '>
+                    <label className="block text-sm font-medium text-gray-700 mb-1 mt-4"> {selectedTicket?.info ? "Ticket Info" : ""} </label>
+                    {selectedTicket?.info?.map(option => (
+                        <p className="text-gray-800 whitespace-pre-wrap mt-2">
+                            <span>{option.date} {"-"} {option.status}</span>
+                            <p> {option.issue_description} </p>
+                        </p>
+                    ))}
+                </div>
             </aside>
 
             {/* Edit Ticket Modal */}
