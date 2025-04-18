@@ -242,9 +242,9 @@ const SupportTicketsPatch = (props) => {
             name: 'Status',
             cell: row => (
                 <span className={`px-2 py-1 rounded-full text-xs ${row?.status === 'open' ? "bg-blue-100 text-blue-800" :
-                        row?.status === 'in_progress' ? "bg-yellow-100 text-yellow-800" :
-                            row?.status === 'resolved' ? "bg-green-100 text-green-800" :
-                                "bg-gray-100 text-gray-800"
+                    row?.status === 'in_progress' ? "bg-yellow-100 text-yellow-800" :
+                        row?.status === 'resolved' ? "bg-green-100 text-green-800" :
+                            "bg-gray-100 text-gray-800"
                     }`}>
                     {row?.status?.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
                 </span>
@@ -369,9 +369,9 @@ const SupportTicketsPatch = (props) => {
                         <div>
                             <p className="text-sm text-gray-500">Status</p>
                             <span className={`px-2 py-1 rounded-full text-xs ${selectedTicket?.status === 'open' ? "bg-blue-100 text-blue-800" :
-                                    selectedTicket?.status === 'in_progress' ? "bg-yellow-100 text-yellow-800" :
-                                        selectedTicket?.status === 'resolved' ? "bg-green-100 text-green-800" :
-                                            "bg-gray-100 text-gray-800"
+                                selectedTicket?.status === 'in_progress' ? "bg-yellow-100 text-yellow-800" :
+                                    selectedTicket?.status === 'resolved' ? "bg-green-100 text-green-800" :
+                                        "bg-gray-100 text-gray-800"
                                 }`}>
                                 {selectedTicket?.status?.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
                             </span>
