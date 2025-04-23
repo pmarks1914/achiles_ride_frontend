@@ -176,8 +176,6 @@ export default function ChatAgentUI() {
   const switchSession = (sessionId) => {
     setActiveSessionId(sessionId);
     
-    // Here you would typically fetch messages for the selected session
-    // For demo purposes, we'll just update the messages based on the session
     if (sessionId === 1) {
       setMessages([
         { id: 1, text: 'Hello!', sender: 'user' },
