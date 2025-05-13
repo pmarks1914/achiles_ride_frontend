@@ -33,7 +33,6 @@ export function Auth() {
   ];
 
   window.onstorage = () => {
-    // console.log("storage ")
     let userDataStore = JSON.parse(localStorage.getItem("userDataStore"));
     if (!userDataStore?.access_token && window.location.pathname.startsWith("/dashboard")) {
       window.location.href = "/auth/sign-in";
