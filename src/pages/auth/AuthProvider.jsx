@@ -3,7 +3,6 @@ import React, { createContext, useState, useEffect } from 'react';
 export const AuthContext = createContext();
 
 window.onstorage = () => {
-  // console.log("storage ", window.location.href)
   let userDataStore = JSON.parse(localStorage.getItem("userDataStore"));
   
   if (!userDataStore?.access_token && window.location.pathname.startsWith("/dashboard")) {
