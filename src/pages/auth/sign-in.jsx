@@ -55,10 +55,6 @@ export function SignIn() {
       setLogin("")
       setLoader('<div class="spinner-border "style="color: #e0922f;"></div>`')
       // console.log(" login ")
-      // let data = JSON.stringify({
-      //   "username": usernameVar,
-      //   "password": passwordVar
-      // });
 
       const formData = new FormData();
       formData.append('username', usernameVar)
